@@ -225,7 +225,7 @@ void ShaderProgram::Upload(const char * Name, glm::mat4 Mat) {
 GLint ShaderProgram::FindUniform(const char * name) {
   GLint ret = glGetUniformLocation(_sid, name);
   if (ret < 0) {
-    std::cerr << "WARNING: no such uniform " << ret << std::endl;
+    std::cerr << "WARNING: no such uniform " << name << std::endl;
   }
   return ret;
 }
@@ -264,7 +264,7 @@ ShaderProgram * fri::ogl::CreateShader(const char * Vert, const char * Frag, int
 
 static void ReadFullFile(const char * FName, GLchar ** OutBuf, GLint * OutLen) {
   std::string base = fri::GetBaseDirectory();
-  base = base.append("shaders/");
+  base = base.append("resources/shaders/");
   base = base.append(FName);
   std::ifstream stream(base.c_str());
   if (!stream) {

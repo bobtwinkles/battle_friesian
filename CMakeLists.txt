@@ -7,7 +7,7 @@ include(FindPkgConfig)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
-list(APPEND CMAKE_CXX_DEBUG_FLAGS "-g -Wall -Werror -v")
+list(APPEND CMAKE_CXX_DEBUG_FLAGS "-g -Wall -Wextra -Werror -v")
 
 pkg_search_module(SDL2 REQUIRED sdl2)
 pkg_search_module(SDL2IMAGE REQUIRED SDL2_image >= 2.0.0)
@@ -16,15 +16,25 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
+find_package(Box2D REQUIRED)
 
 set(SRC Main.cpp
+        systems/GameContext.cpp
+        systems/animation/Animation.cpp
+        systems/animation/AnimationSystem.cpp
+        systems/entity/EntitySystem.cpp
+        systems/entity/entities/EasyHorse.cpp
+        systems/physics/PhysicsSystem.cpp
+        systems/render/RenderSystem.cpp
         metric/GPUMetric.cpp
         util/Util.cpp
+        util/ImageLoad.cpp
         ogl/Shader.cpp
+        ogl/Texture.cpp
+        ogl/TexturedVertexBuffer.cpp
         ogl/ui/UI.cpp
         ogl/ui/Graph.cpp
-        ogl/ui/Text.cpp
-        ogl/TexturedVertexBuffer.cpp)
+        ogl/ui/Text.cpp)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -35,10 +45,15 @@ include_directories(SYSTEM ${FONTCONFIG_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_free
 include_directories(${CMAKE_SOURCE_DIR}/ogl
                     ${CMAKE_SOURCE_DIR}/ogl/ui
                     ${CMAKE_SOURCE_DIR}/metric
+                    ${CMAKE_SOURCE_DIR}/systems
+                    ${CMAKE_SOURCE_DIR}/systems/animation
+                    ${CMAKE_SOURCE_DIR}/systems/entity
+                    ${CMAKE_SOURCE_DIR}/systems/physics
+                    ${CMAKE_SOURCE_DIR}/systems/render
                     ${CMAKE_SOURCE_DIR}/util)
 
 add_executable(friesian ${SRC})
 
-target_link_libraries(friesian ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES})
+target_link_libraries(friesian ${BOX2D_LIBRARY} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FONTCONFIG_LIBRARIES} ${FREETYPE_LIBRARIES})
 
-install(DIRECTORY shaders DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+install(DIRECTORY resources DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")

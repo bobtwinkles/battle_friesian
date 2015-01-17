@@ -7,4 +7,11 @@
 -I./metric
 -I./ogl/ui
 -I./ogl/
+-I./systems/
+-I./systems/animation
+-I./systems/entity
+-I./systems/entity/entities
+-I./systems/physics
+-I./systems/render
+-I./systems/render/renderables
 -I./

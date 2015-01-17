@@ -15,11 +15,12 @@
 //// ----
 /******************************************************************************\
  * Attributes:
- *   vec4 coordinate;        // .xy is x and y, .zw is texture coordinate
- *   vec4 color;             // color by which the output is multiplied
+ *   vec4 coordinate;            // .xy is x and y, .zw is texture coordinate
+ *   vec4 color;                 // color by which the output is multiplied
  * Uniforms:
- *   uniform mat4 transform; // transform matrix
- *   sampler2D texture;      // texture to render with
+ *   uniform mat4 transform;     // transform matrix
+ *   uniform mat4 tex_transform; // Texture transform
+ *   sampler2D texture;          // texture to render with
 \******************************************************************************/
 #define SHADER_ORTHO 0x01
 /******************************************************************************\
@@ -38,10 +39,11 @@
 //// ----
 // Names
 //// ----
-#define NAME_TRANSFORM    "transform"
-#define NAME_TEXTURE      "texture"
-#define NAME_X_FADE_START "x_fade_start"
-#define NAME_X_FADE_END   "x_fade_end"
+#define NAME_TRANSFORM     "transform"
+#define NAME_TEX_TRANSFORM "tex_transform"
+#define NAME_TEXTURE       "tex"
+#define NAME_X_FADE_START  "x_fade_start"
+#define NAME_X_FADE_END    "x_fade_end"
 
 namespace fri {
   namespace ogl {

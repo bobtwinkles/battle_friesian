@@ -4,10 +4,13 @@
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */
 #define GL3_PROTOTYPES 1
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 #include <SDL2/SDL.h>
 #define PROGRAM_NAME "Fressian"
+
+#include "GameContext.hpp"
+#include "entities/EasyHorse.hpp"
 
 /* A simple function that prints a message, the error code returned by SDL,
  * and quits the application */
@@ -62,9 +65,20 @@ int main(int argc, char *argv[]) {
   maincontext = SDL_GL_CreateContext(mainwindow);
   checkSDLError(__LINE__);
 
-
+  // Initialize GLEW and our stuff
+  glewExperimental = true;
+  int err = glewInit();
+  if (err != GLEW_OK) {
+    std::cerr << "Failed to initialize glew : " << glewGetErrorString(err) << std::endl;
+    exit(1);
+  }
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(1);
+
+  // Initialize our [sub]systems
+  fri::InitializeBaseDirectory(argv[0]);
+  fri::system::GameContext ctx;
+  fri::system::entity::entities::EasyHorse h(ctx);
 
   bool running = true;
 
@@ -79,8 +93,19 @@ int main(int argc, char *argv[]) {
               break;
           }
           break;
+        case SDL_KEYDOWN:
+          switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+              running = false;
+              break;
+          }
+          break;
       }
     }
+
+    ctx.Tick(1.0/60.0);
+
+    SDL_GL_SwapWindow(mainwindow);
   }
 
   /* Delete our opengl context, destroy our window, and shutdown SDL */

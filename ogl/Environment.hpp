@@ -11,14 +11,13 @@ namespace fri {
       private:
         DISALLOW_COPY_AND_ASSIGN(Environment);
         fri::ogl::ShaderProgram * _program;
-
-        int _width, _height;
       public:
-        Environment() : _program(NULL), _width(1), _height(1) {}
+        Environment() : _program(NULL) {}
 
         inline ShaderProgram * GetCurrentShaderProgram() const { return _program; }
 
         inline void MakeProgramCurrent(ShaderProgram * Program) {
+          _program = Program;
           _program->Bind();
           _program = Program;
         }

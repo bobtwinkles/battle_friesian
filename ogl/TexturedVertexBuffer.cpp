@@ -5,7 +5,8 @@
 using fri::ogl::TexturedVertex;
 using fri::ogl::TexturedVertexBuffer;
 
-TexturedVertexBuffer::TexturedVertexBuffer(GLenum Mode, GLenum Usage) {
+TexturedVertexBuffer::TexturedVertexBuffer(GLenum Mode, GLenum Usage, std::shared_ptr<Texture> Texture) :
+  _texture(Texture) {
   _mode = Mode;
   _usage = Usage;
 
@@ -19,7 +20,6 @@ void TexturedVertexBuffer::_Init() {
 
   glGenBuffers(2, buffers);
   glGenVertexArrays(1, &_vao);
-  glGenTextures(1, &_texture);
 
   _index_buffer = buffers[0];
   _data_buffer  = buffers[1];
@@ -32,7 +32,6 @@ TexturedVertexBuffer::~TexturedVertexBuffer() {
 
   glDeleteBuffers(2, buffers);
   glDeleteVertexArrays(1, &_vao);
-  glDeleteTextures(1, &_texture);
 }
 
 void TexturedVertexBuffer::AddVertex(TexturedVertex Vertex) {
@@ -62,14 +61,6 @@ void TexturedVertexBuffer::AddVerticies(std::vector<TexturedVertex> Verts, std::
   _verts_ok = false;
 }
 
-void TexturedVertexBuffer::SetTextureData(GLsizei Width, GLsizei Height, GLenum Format,
-                                          GLenum Type, GLvoid * Data) {
-  glBindTexture(GL_TEXTURE_2D, _texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height, 0, Format, Type, Data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-}
-
 void TexturedVertexBuffer::Sync() {
   glBindBuffer(GL_ARRAY_BUFFER, _data_buffer);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _index_buffer);
@@ -93,15 +84,18 @@ void TexturedVertexBuffer::Render(const fri::ogl::Environment & Env) const {
   fri::ogl::ShaderProgram * cs = Env.GetCurrentShaderProgram();
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, _texture);
+  _texture->Bind();
   cs->Upload(NAME_TEXTURE, 0); // we want to use texture 0
 
   glEnableVertexAttribArray(LOC_COORDINATE);
+  glEnableVertexAttribArray(LOC_COLOR);
   glVertexAttribPointer(LOC_COORDINATE, 4, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), 0);
+  glVertexAttribPointer(LOC_COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), ((char*)NULL) + (4 * sizeof(float)));
 
   glDrawElements(_mode, _indicies.size(), GL_UNSIGNED_INT, 0);
 
   glDisableVertexAttribArray(LOC_COORDINATE);
+  glDisableVertexAttribArray(LOC_COLOR);
 
   GLERR();
 }
@@ -113,7 +107,7 @@ void TexturedVertexBuffer::Render(const fri::ogl::Environment & Env) const {
 //////////////////////////////////////////
 //////////////////////////////////////////
 
-void fri::ogl::QueueTexturedRectangle(TexturedVertexBuffer & Buffer, glm::vec3 PStart, glm::vec3 PEnd
+void fri::ogl::QueueTexturedRectangle(TexturedVertexBuffer & Buffer, glm::vec2 PStart, glm::vec2 PEnd
                                                                    , glm::vec2 TStart, glm::vec2 TEnd) {
   TexturedVertex vert;
   std::vector<TexturedVertex> tid;

@@ -10,6 +10,7 @@
 #include "Util.hpp"
 
 #include "Environment.hpp"
+#include "Texture.hpp"
 
 namespace fri {
   namespace ogl {
@@ -23,9 +24,10 @@ namespace fri {
         GLuint _index_buffer;
         GLuint _data_buffer;
         GLuint _vao;
-        GLuint _texture;
         GLenum _usage;
         GLenum _mode;
+
+        std::shared_ptr<Texture> _texture;
 
         std::vector<TexturedVertex> _verticies;
         std::vector<GLuint> _indicies;
@@ -36,21 +38,21 @@ namespace fri {
 
         DISALLOW_COPY_AND_ASSIGN(TexturedVertexBuffer);
       public:
-        TexturedVertexBuffer(GLenum Mode, GLenum Usage);
+        TexturedVertexBuffer(GLenum Mode, GLenum Usage, std::shared_ptr<Texture> Texture);
         ~TexturedVertexBuffer();
 
         void AddVertex(TexturedVertex Vertex);
         void AddVerticies(std::vector<TexturedVertex> Verts, std::vector<GLuint> Inidicies);
         void ClearVertexData();
 
-        void SetTextureData(GLsizei Width, GLsizei Height, GLenum Format, GLenum Type, GLvoid * data);
+        void SetTexture(std::shared_ptr<Texture> Tex) { _texture = Tex; }
 
         void Sync();
 
         void Render(const fri::ogl::Environment & Env) const;
     };
 
-    void QueueTexturedRectangle(TexturedVertexBuffer & Buffer, glm::vec3 PStart, glm::vec3 PEnd
+    void QueueTexturedRectangle(TexturedVertexBuffer & Buffer, glm::vec2 PStart, glm::vec2 PEnd
                                                              , glm::vec2 TStart, glm::vec2 TEnd);
   }
 }
