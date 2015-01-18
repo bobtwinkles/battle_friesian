@@ -2,6 +2,8 @@
 
 #include "OGLUtil.hpp"
 
+#include <cassert>
+
 using fri::ogl::TexturedVertex;
 using fri::ogl::TexturedVertexBuffer;
 
@@ -72,10 +74,7 @@ void TexturedVertexBuffer::Sync() {
 }
 
 void TexturedVertexBuffer::Render(const fri::ogl::Environment & Env) const {
-  if (!_verts_ok) {
-    std::cerr << "Tried to render non-synced TexturedVertexBuffer" << std::endl;
-    BUG();
-  }
+  assert(_verts_ok);
   glBindVertexArray(_vao);
   glBindBuffer(GL_ARRAY_BUFFER, _data_buffer);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _index_buffer);

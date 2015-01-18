@@ -71,5 +71,9 @@ void RenderSystem::Tick(fri::system::GameContext & Context, double Step) {
 
   _bg->Render(*_env);
 
+  for (auto ren : _renderables) {
+    ren->Render(*this);
+  }
+
   GLERR();
 }

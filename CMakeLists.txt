@@ -26,6 +26,7 @@ set(SRC Main.cpp
         systems/entity/entities/EasyHorse.cpp
         systems/physics/PhysicsSystem.cpp
         systems/render/RenderSystem.cpp
+        systems/render/renderables/MobileTexturedRender.cpp
         metric/GPUMetric.cpp
         util/Util.cpp
         util/ImageLoad.cpp
@@ -42,7 +43,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories(SYSTEM ${FONTCONFIG_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_freetype2} ${GLM_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
 
-include_directories(${CMAKE_SOURCE_DIR}/ogl
+include_directories(${CMAKE_SOURCE_DIR}
+                    ${CMAKE_SOURCE_DIR}/ogl
                     ${CMAKE_SOURCE_DIR}/ogl/ui
                     ${CMAKE_SOURCE_DIR}/metric
                     ${CMAKE_SOURCE_DIR}/systems

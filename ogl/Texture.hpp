@@ -21,6 +21,9 @@ namespace fri {
                             GLenum Type, GLvoid * Data);
 
         void Bind() const { glBindTexture(GL_TEXTURE_2D, _texture); }
+
+        int GetWidth() const { return _width; }
+        int GetHeight() const { return _height; }
     };
   }
 }

@@ -11,8 +11,8 @@ namespace fri {
       class IRenderable {
         private:
         public:
-          IRenderable();
-          ~IRenderable();
+          IRenderable() {}
+          ~IRenderable() {}
 
           virtual void Render(RenderSystem &) = 0;
       };

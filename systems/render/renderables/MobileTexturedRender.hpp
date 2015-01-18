@@ -8,16 +8,31 @@
 namespace fri {
   namespace system {
     namespace render {
-      class MobileTextureRender : public IRenderable {
+      class MobileTexturedRenderer : public IRenderable {
         private:
           std::shared_ptr<ogl::Texture> _tex;
-          ogl::TexturedVertexBuffer buffer;
-        public:
-          MobileTextureRender(std::shared_ptr<ogl::Texture> Tex);
-          ~MobileTextureRender();
+          ogl::TexturedVertexBuffer _buffer;
+          bool _needs_update;
 
+          float _x, _y;
+
+          void Update();
+        public:
+          MobileTexturedRenderer(std::shared_ptr<ogl::Texture> Tex);
+
+          MobileTexturedRenderer(const MobileTexturedRenderer & Other);
+          MobileTexturedRenderer(const MobileTexturedRenderer && Other);
+          MobileTexturedRenderer & operator= (const MobileTexturedRenderer & Other);
+
+          ~MobileTexturedRenderer();
+
+          void SetTexture(std::shared_ptr<ogl::Texture> Tex);
+          /**
+           * Sets the position in screen coordinates of the bottom center of this object
+           **/
+          void SetPosition(float X, float Y);
           virtual void Render(RenderSystem & System);
-      }
+      };
     }
   }
 }

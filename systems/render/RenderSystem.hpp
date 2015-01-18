@@ -33,6 +33,8 @@ namespace fri {
           RenderableIndex RegisterRenderable(std::shared_ptr<IRenderable> Ren);
           void RemoveRenderable(RenderableIndex & Index);
 
+          fri::ogl::Environment & GetEnvironment() { return * _env; }
+
           virtual void Tick (fri::system::GameContext & Context, double Step);
       };
     }
