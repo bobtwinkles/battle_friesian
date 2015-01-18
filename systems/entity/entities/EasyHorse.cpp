@@ -39,8 +39,6 @@ void EasyHorse::Tick(GameContext & Context, double Step) {
   // Sync position between rendering and physics systems
   b2World & world = Context.GetPhysicsSystem().GetWorld();
   b2Vec2 vec = _body->GetPosition();
-  std::cout << (vec.x * GFX_SCALE / PHYS_SCALE) << " " <<
-                         (vec.y * GFX_SCALE / PHYS_SCALE) << std::endl;
   _renderer->SetPosition(vec.x * GFX_SCALE / PHYS_SCALE,
                          vec.y * GFX_SCALE / PHYS_SCALE);
 
