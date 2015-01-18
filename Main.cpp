@@ -9,8 +9,7 @@
 #include <SDL2/SDL.h>
 #define PROGRAM_NAME "Fressian"
 
-#include "GameContext.hpp"
-#include "entities/EasyHorse.hpp"
+#include "flow/GameFlow.hpp"
 
 /* A simple function that prints a message, the error code returned by SDL,
  * and quits the application */
@@ -77,10 +76,8 @@ int main(int argc, char *argv[]) {
 
   // Initialize our [sub]systems
   fri::InitializeBaseDirectory(argv[0]);
-  fri::system::GameContext ctx;
-  auto h = std::make_shared<fri::system::entity::entities::EasyHorse>(ctx, 5, 0.5);
 
-  ctx.GetEntitySystem().RegisterGameObject(h);
+  fri::flow::GameFlow gameflow;
 
   bool running = true;
 
@@ -105,7 +102,7 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    ctx.Tick(1.0/60.0);
+    gameflow.Tick(1.0 / 60.0);
 
     SDL_GL_SwapWindow(mainwindow);
   }
