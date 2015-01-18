@@ -3,7 +3,7 @@
 using fri::system::GameContext;
 using fri::system::physics::PhysicsSystem;
 
-PhysicsSystem::PhysicsSystem() : _world(b2Vec2(0, -0.5)) {
+PhysicsSystem::PhysicsSystem() : _world(b2Vec2(0, -9.81)) {
 }
 
 PhysicsSystem::~PhysicsSystem() {
