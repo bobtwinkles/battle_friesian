@@ -1,6 +1,7 @@
 #include "EasyHorse.hpp"
 
 #include "systems/GameContext.hpp"
+#include "systems/Scales.hpp"
 
 using fri::system::GameContext;
 using fri::system::Registry;
@@ -10,7 +11,7 @@ using fri::system::animation::AnimationRegistry;
 using fri::system::entity::entities::EasyHorse;
 using fri::system::render::MobileTexturedRenderer;
 
-EasyHorse::EasyHorse(GameContext & Context) {
+EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   _animations = new std::shared_ptr<Animation>[2];
   AnimationRegistry & reg = Context.GetAnimationSystem().GetRegistry();
   _animations[0] = reg.Get("resources/animations/level1battlefriesian/canter.anim");;
@@ -20,11 +21,14 @@ EasyHorse::EasyHorse(GameContext & Context) {
   b2BodyDef def;
   b2World & world = Context.GetPhysicsSystem().GetWorld();
   def.type = b2_dynamicBody;
-  def.position.Set(0.f, 0.f);
+  def.position.Set(X, Y);
   _body = world.CreateBody(&def);
 
   _renderer = std::make_shared<MobileTexturedRenderer>((*_current_animation_index)->GetCurrent());
   _renderable_index = Context.GetRenderSystem().RegisterRenderable(_renderer);
+  _renderer->SetPosition(X * GFX_SCALE / PHYS_SCALE, Y * GFX_SCALE / PHYS_SCALE);
+
+  _temp = 1;
 }
 
 EasyHorse::~EasyHorse() {
@@ -32,5 +36,14 @@ EasyHorse::~EasyHorse() {
 }
 
 void EasyHorse::Tick(GameContext & Context, double Step) {
+  // Sync position between rendering and physics systems
+  b2World & world = Context.GetPhysicsSystem().GetWorld();
+  b2Vec2 vec = _body->GetPosition();
+  std::cout << (vec.x * GFX_SCALE / PHYS_SCALE) << " " <<
+                         (vec.y * GFX_SCALE / PHYS_SCALE) << std::endl;
+  _renderer->SetPosition(vec.x * GFX_SCALE / PHYS_SCALE,
+                         vec.y * GFX_SCALE / PHYS_SCALE);
+
+  // Make sure the renderer has an up-to-date texture
   _renderer->SetTexture((*_current_animation_index)->GetCurrent());
 }

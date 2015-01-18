@@ -22,8 +22,11 @@ namespace fri {
             std::shared_ptr<fri::system::render::MobileTexturedRenderer> _renderer;
             std::shared_ptr<fri::system::animation::Animation> * _animations;
             b2Body * _body;
+
+            float _temp;
           public:
-            EasyHorse(fri::system::GameContext & Context);
+            // X and Y are specified in physics coordinates
+            EasyHorse(fri::system::GameContext & Context, float X, float Y);
             ~EasyHorse();
 
             virtual void Tick(fri::system::GameContext & Context, double Step);

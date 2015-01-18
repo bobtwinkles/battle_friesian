@@ -9,4 +9,5 @@ void GameContext::Tick(double Step) {
   _animation.Tick(*this, Step);
   _render.Tick(*this, Step);
   _entity.Tick(*this, Step);
+  _physics.Tick(*this, Step);
 }

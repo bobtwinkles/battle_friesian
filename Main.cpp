@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
   // Initialize our [sub]systems
   fri::InitializeBaseDirectory(argv[0]);
   fri::system::GameContext ctx;
-  auto h = std::make_shared<fri::system::entity::entities::EasyHorse>(ctx);
+  auto h = std::make_shared<fri::system::entity::entities::EasyHorse>(ctx, 5, 0.5);
 
   ctx.GetEntitySystem().RegisterGameObject(h);
 
