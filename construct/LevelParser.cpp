@@ -1,5 +1,9 @@
 #include "construct/Parser.hpp"
 
+#include "systems/render/RenderSystem.hpp"
+
+#include "util/ImageLoad.hpp"
+
 using fri::construct::BuildParseTree;
 using fri::construct::IBuilder;
 using fri::construct::ParseError;
@@ -16,6 +20,8 @@ namespace {
         return ParseError(0, 0, "BG must be followed by a path (no spaces!)");
       }
       std::cout << "  " << "BG will be loaded from " << file_path << std::endl;
+      fri::system::render::RenderSystem & rs = Affect.GetRenderSystem();
+      rs.SetBackgroundTexture(fri::LoadImage(file_path));
       return ParseError();
     }
   };

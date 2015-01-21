@@ -11,15 +11,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using fri::ogl::Texture;
+using fri::system::render::RenderableIndex;
 using fri::system::render::RenderSystem;
 using fri::system::render::IRenderable;
-using fri::system::render::RenderableIndex;
 
 RenderSystem::RenderSystem() : ISystem() {
   _prog = fri::ogl::CreateShader("base.vert", "base.frag", SHADER_ORTHO);
   _env = new fri::ogl::Environment();
   _env->MakeProgramCurrent(_prog);
-  _bg = new fri::ogl::TexturedVertexBuffer(GL_TRIANGLE_STRIP, GL_STATIC_DRAW, LoadImage("resources/backgrounds/forestbackground.png"));
+  _bg = new fri::ogl::TexturedVertexBuffer(GL_TRIANGLE_STRIP, GL_STATIC_DRAW, nullptr);
 
   fri::ogl::QueueTexturedRectangle(*_bg, glm::vec2(0.0, 0.0), glm::vec2(1.0, 9.0/16.0),
                                          glm::vec2(0.0, 0.0), glm::vec2(1.0, 1.0));
@@ -57,6 +58,10 @@ static void PrintMatrix(glm::mat4 & Matrix) {
     if (i % 4 == 3)
       std::cout << std::endl;
   }
+}
+
+void RenderSystem::SetBackgroundTexture(std::shared_ptr<Texture> Tex)  {
+  _bg->SetTexture(Tex);
 }
 
 void RenderSystem::Tick(fri::system::GameContext & Context, double Step) {

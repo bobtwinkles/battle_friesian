@@ -14,6 +14,7 @@ GameFlow::GameFlow() {
 
   std::string fname = fri::GetBaseDirectory();
   fname.append("resources/levels/level0.txt");
+  std::cout << "Loading level from " << fname << std::endl;
   std::ifstream in(fname);
   fri::construct::ParseLevel(in, _ctx);
 }

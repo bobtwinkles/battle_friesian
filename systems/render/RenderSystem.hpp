@@ -36,6 +36,8 @@ namespace fri {
           fri::ogl::Environment & GetEnvironment() { return * _env; }
 
           virtual void Tick (fri::system::GameContext & Context, double Step);
+
+          void SetBackgroundTexture(std::shared_ptr<fri::ogl::Texture>);
       };
     }
   }
