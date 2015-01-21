@@ -19,6 +19,8 @@ find_package(Fontconfig REQUIRED)
 find_package(Box2D REQUIRED)
 
 set(SRC Main.cpp
+        construct/LevelParser.cpp
+        construct/Parser.cpp
         flow/GameFlow.cpp
         systems/GameContext.cpp
         systems/animation/Animation.cpp

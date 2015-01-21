@@ -10,6 +10,7 @@
 #define PROGRAM_NAME "Fressian"
 
 #include "flow/GameFlow.hpp"
+#include "construct/Parser.hpp"
 
 /* A simple function that prints a message, the error code returned by SDL,
  * and quits the application */
@@ -74,7 +75,10 @@ int main(int argc, char *argv[]) {
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(1);
 
+  //
   // Initialize our [sub]systems
+  //
+  // Base directory
   fri::InitializeBaseDirectory(argv[0]);
 
   fri::flow::GameFlow gameflow;
