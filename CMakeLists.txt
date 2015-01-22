@@ -27,6 +27,7 @@ set(SRC Main.cpp
         systems/animation/AnimationSystem.cpp
         systems/entity/EntitySystem.cpp
         systems/entity/entities/EasyHorse.cpp
+        systems/entity/entities/Platform.cpp
         systems/physics/PhysicsSystem.cpp
         systems/render/RenderSystem.cpp
         systems/render/renderables/MobileTexturedRender.cpp

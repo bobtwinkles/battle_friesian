@@ -24,6 +24,18 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   def.position.Set(X, Y);
   _body = world.CreateBody(&def);
 
+  b2PolygonShape box;
+  float half_phys_w = _animations[0]->GetCurrent()->GetWidth() * PHYS_SCALE / IMG_SCALE / 3
+      , half_phys_h = _animations[0]->GetCurrent()->GetHeight() * PHYS_SCALE / IMG_SCALE / 3;
+  box.SetAsBox(half_phys_w, half_phys_w, b2Vec2(0, 0), 0);
+
+  b2FixtureDef fixture;
+  fixture.shape = &box;
+  fixture.density = 1;
+  fixture.friction = 0.3f;
+
+  _body->CreateFixture(&fixture);
+
   _renderer = std::make_shared<MobileTexturedRenderer>((*_current_animation_index)->GetCurrent());
   _renderable_index = Context.GetRenderSystem().RegisterRenderable(_renderer);
   _renderer->SetPosition(X * GFX_SCALE / PHYS_SCALE, Y * GFX_SCALE / PHYS_SCALE);

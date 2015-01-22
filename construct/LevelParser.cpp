@@ -1,5 +1,8 @@
 #include "construct/Parser.hpp"
 
+#include <memory>
+
+#include "systems/entity/entities/Platform.hpp"
 #include "systems/render/RenderSystem.hpp"
 
 #include "util/ImageLoad.hpp"
@@ -15,7 +18,7 @@ namespace {
     virtual const char * GetKeyword() const { return "BG"; }
     virtual ParseError Visit(const char * Line, GameContext & Affect) {
       char file_path[1024];
-      int parse = sscanf(Line, " %s", file_path);
+      int parse = sscanf(Line, " %1023s", file_path);
       if (parse != 1) {
         return ParseError(0, 0, "BG must be followed by a path (no spaces!)");
       }
@@ -29,7 +32,23 @@ namespace {
   struct PlatformParser : public IBuilder<GameContext> {
     virtual const char * GetKeyword() const { return "PLATFORM"; }
     virtual ParseError Visit(const char * Line, GameContext & Affect) {
-      std::cout << "Parse PLATFORM! " << Line << std::endl;
+      float x, y, w, h;
+      char file_path[1024];
+      int parse = sscanf(Line, " %f %f %f %f %1023s", &x, &y, &w, &h, file_path);
+      if (parse < 5) {
+        return ParseError(0, 0, "Platform must have \"x y w h image\" image can be NOIMG to indicate that this wall is invisible");
+      }
+      std::cout << "  Adding platform" << std::endl;
+      std::cout << "    Position  " << x << ", " << y << std::endl;
+      std::cout << "    Size " << w << "x" << h << std::endl;
+      std::cout << "    Image " << file_path << std::endl;
+      std::shared_ptr<fri::ogl::Texture> tex = nullptr;
+      if (strcmp(file_path, "NOIMG")) {
+        tex = fri::LoadImage(file_path);
+      }
+      auto p = std::make_shared<fri::system::entity::entities::Platform>(Affect, x, y, w, h, tex);
+      Affect.GetEntitySystem().RegisterGameObject(p);
+
       return ParseError();
     }
   };
