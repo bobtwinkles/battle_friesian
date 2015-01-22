@@ -18,8 +18,8 @@ void AnimationSystem::Tick(fri::system::GameContext & Context, double step) {
   }
 }
 
-AnimationIndex AnimationSystem::RegisterAnimation(std::shared_ptr<Animation> Anim) {
-  return _animations.insert(_animations.begin(), Anim);
+AnimationIndex AnimationSystem::RegisterAnimation(Animation & Anim) {
+  return _animations.insert(_animations.begin(), &Anim);
 }
 
 void AnimationSystem::RemoveAnimation(AnimationIndex & Index) {

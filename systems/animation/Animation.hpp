@@ -29,7 +29,7 @@ namespace fri {
 
           void Step();
 
-          std::shared_ptr<fri::ogl::Texture> GetCurrent() { return _frames[_current_frame]; }
+          std::shared_ptr<fri::ogl::Texture> GetCurrent() const { return _frames[_current_frame]; }
       };
     }
   }

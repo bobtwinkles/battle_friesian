@@ -2,7 +2,7 @@
 BG resources/backgrounds/intropaddockbackground.png
 
 # platform specification
-PLATFORM 0 -0.01 1 0.03 NOIMG
+PLATFORM 0 0 1 0.02 NOIMG
 
 # enemy specification
 # ENEMY EasyHorse 0.5 0.2

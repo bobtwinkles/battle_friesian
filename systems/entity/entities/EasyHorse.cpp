@@ -12,10 +12,13 @@ using fri::system::entity::entities::EasyHorse;
 using fri::system::render::MobileTexturedRenderer;
 
 EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
-  _animations = new std::shared_ptr<Animation>[2];
+  _animations = new Animation[2];
   AnimationRegistry & reg = Context.GetAnimationSystem().GetRegistry();
   _animations[0] = reg.Get("resources/animations/level1battlefriesian/canter.anim");;
   _animations[1] = reg.Get("resources/animations/level1battlefriesian/attack1.anim");;
+  for (int i = 0; i < random() % 100; ++i) { //TODO: MAke this way less hacky
+    _animations[0].Step();
+  }
   _current_animation_index = Context.GetAnimationSystem().RegisterAnimation(_animations[0]);
 
   b2BodyDef def;
@@ -25,8 +28,8 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   _body = world.CreateBody(&def);
 
   b2PolygonShape box;
-  float half_phys_w = _animations[0]->GetCurrent()->GetWidth() * PHYS_SCALE / IMG_SCALE / 3
-      , half_phys_h = _animations[0]->GetCurrent()->GetHeight() * PHYS_SCALE / IMG_SCALE / 3;
+  float half_phys_w = _animations[0].GetCurrent()->GetWidth() * PHYS_SCALE / IMG_SCALE / 3
+      , half_phys_h = _animations[0].GetCurrent()->GetHeight() * PHYS_SCALE / IMG_SCALE / 3;
   box.SetAsBox(half_phys_w, half_phys_w, b2Vec2(0, 0), 0);
 
   b2FixtureDef fixture;

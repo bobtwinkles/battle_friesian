@@ -42,7 +42,7 @@ namespace fri {
           _storage.insert(std::make_pair(Key, Value));
         }
 
-        T & Get(const char * Key) {
+        T Get(const char * Key) {
           auto it = _storage.find(Key);
           if (it == _storage.end()) {
             it = _storage.insert(std::make_pair(Key, _constructor(Key))).first;

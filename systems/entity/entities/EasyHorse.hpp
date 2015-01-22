@@ -20,7 +20,7 @@ namespace fri {
             fri::system::animation::AnimationIndex _current_animation_index;
             fri::system::render::RenderableIndex _renderable_index;
             std::shared_ptr<fri::system::render::MobileTexturedRenderer> _renderer;
-            std::shared_ptr<fri::system::animation::Animation> * _animations;
+            fri::system::animation::Animation * _animations;
             b2Body * _body;
 
             float _temp;

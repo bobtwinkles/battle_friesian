@@ -9,9 +9,9 @@ using fri::flow::GameFlow;
 using fri::flow::IFlow;
 
 GameFlow::GameFlow() {
-  auto h1 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 5, 1);
+  auto h1 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 4, 1);
   _ctx.GetEntitySystem().RegisterGameObject(h1);
-  auto h2 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 5, 4);
+  auto h2 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 6, 1);
   _ctx.GetEntitySystem().RegisterGameObject(h2);
 
   std::string fname = fri::GetBaseDirectory();

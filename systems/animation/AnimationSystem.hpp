@@ -5,21 +5,20 @@
 #include "System.hpp"
 #include "Registry.hpp"
 
-#include <memory>
 #include <list>
 
 namespace fri {
   namespace system {
     namespace animation {
       struct AnimationPointerCreator {
-        std::shared_ptr<Animation> operator() (const char * Name) const {
-          return std::move(std::shared_ptr<Animation>(new Animation(Name)));
+        Animation operator() (const char * Name) const {
+          return Animation(Name);
         }
       };
 
-      typedef std::list<std::shared_ptr<Animation>> AnimationList;
+      typedef std::list<Animation*> AnimationList;
       typedef AnimationList::const_iterator AnimationIndex;
-      typedef fri::system::Registry<std::shared_ptr<Animation>, AnimationPointerCreator> AnimationRegistry;
+      typedef fri::system::Registry<Animation, AnimationPointerCreator> AnimationRegistry;
 
       class AnimationSystem : public fri::system::ISystem {
         private:
@@ -29,7 +28,7 @@ namespace fri {
           AnimationSystem();
           virtual ~AnimationSystem();
 
-          AnimationIndex RegisterAnimation(std::shared_ptr<Animation> Anim);
+          AnimationIndex RegisterAnimation(Animation & Anim);
           void RemoveAnimation(AnimationIndex & Index);
 
           virtual void Tick (fri::system::GameContext & Context, double Step);
