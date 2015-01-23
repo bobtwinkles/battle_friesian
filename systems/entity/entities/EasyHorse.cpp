@@ -15,10 +15,8 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   _animations = new Animation[2];
   AnimationRegistry & reg = Context.GetAnimationSystem().GetRegistry();
   _animations[0] = reg.Get("resources/animations/level1battlefriesian/canter.anim");;
+  _animations[0].Randomize();
   _animations[1] = reg.Get("resources/animations/level1battlefriesian/attack1.anim");;
-  for (int i = 0; i < random() % 100; ++i) { //TODO: MAke this way less hacky
-    _animations[0].Step();
-  }
   _current_animation_index = Context.GetAnimationSystem().RegisterAnimation(_animations[0]);
 
   b2BodyDef def;

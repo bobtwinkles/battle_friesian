@@ -27,7 +27,10 @@ namespace fri {
 
           void Swap(Animation & Other);
 
+          // Advance one frame
           void Step();
+          // Choose random current frame;
+          void Randomize();
 
           std::shared_ptr<fri::ogl::Texture> GetCurrent() const { return _frames[_current_frame]; }
       };

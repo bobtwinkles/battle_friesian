@@ -86,6 +86,10 @@ void Animation::Swap(Animation & Other) {
   std::swap(_current_internal_frame, Other._current_internal_frame);
 }
 
+void Animation::Randomize() {
+  _current_frame = random() % _num_frames;
+}
+
 void Animation::Step() {
   ++_current_internal_frame;
   if (_current_internal_frame >= _frametimes[_current_frame]) {

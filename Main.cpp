@@ -80,6 +80,8 @@ int main(int argc, char *argv[]) {
   //
   // Base directory
   fri::InitializeBaseDirectory(argv[0]);
+  // Randomization
+  srand(0);
 
   fri::flow::GameFlow gameflow;
 
