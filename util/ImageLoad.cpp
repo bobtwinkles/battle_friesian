@@ -53,6 +53,9 @@ shared_ptr<Texture> fri::LoadImage(const char * FName) {
     ret->SetTextureData(surface->w, surface->h, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
     SDL_FreeSurface(surface);
+    SDL_FreeSurface(rgba);
+
+    delete[] buffer;
 
     return ret;
   }

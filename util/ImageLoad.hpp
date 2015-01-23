@@ -2,7 +2,7 @@
 #define _UTIL_IMAGELOAD_H_
 
 #include <memory>
-#include "Texture.hpp"
+#include "ogl/Texture.hpp"
 
 #include <vector>
 
