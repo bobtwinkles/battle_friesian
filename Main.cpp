@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
   // Randomization
   srand(0);
 
-  fri::flow::GameFlow gameflow;
+  fri::flow::GameFlow * gameflow = new fri::flow::GameFlow();
 
   bool running = true;
 
@@ -108,10 +108,12 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    gameflow.Tick(1.0 / 60.0);
+    gameflow->Tick(1.0 / 60.0);
 
     SDL_GL_SwapWindow(mainwindow);
   }
+
+  delete gameflow;
 
   /* Delete our opengl context, destroy our window, and shutdown SDL */
   SDL_GL_DeleteContext(maincontext);

@@ -1,0 +1,28 @@
+{
+  libdl-new-object
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  fun:malloc
+  fun:_dl_new_object
+  ...
+  obj:/usr/lib/libdl*
+  ...
+}
+
+{
+  libdl-local_strdup
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  fun:malloc
+  fun:local_strdup
+}
+
+{
+  libdl-calloc
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  fun:calloc
+  ...
+  obj:/usr/lib/libdl*
+  ...
+}

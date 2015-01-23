@@ -1,0 +1,42 @@
+{
+  SDL-FramebufferCheck
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:malloc
+  fun:glXGetFBConfigs
+  fun:glXChooseFBConfig
+  obj:/usr/lib/libSDL2*
+  obj:/usr/lib/libSDL2*
+  fun:main
+}
+
+{
+  SDL-OpenImage
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  fun:malloc
+  fun:_XimOpenIM
+  obj:/usr/lib/libSDL2*
+  obj:/usr/lib/libSDL2*
+  obj:/usr/lib/libSDL2*
+  fun:main
+}
+
+{
+  SDL-dlopen
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  fun:dlopen
+  ...
+  obj:/usr/lib/libSDL2*
+}
+
+{
+  SDL-dbus
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:/usr/lib/libdbus*
+  ...
+}

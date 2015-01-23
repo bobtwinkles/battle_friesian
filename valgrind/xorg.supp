@@ -1,0 +1,27 @@
+{
+  X11-internal
+  Memcheck:Leak
+  match-leak-kinds: definite,reachable
+  ...
+  fun:_X*
+  obj:/usr/lib/libX11.so.*
+  ...
+}
+
+{
+  X11-dri
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:/usr/lib/xorg/modules/dri/*
+  ...
+}
+
+{
+  X11-XInitThreads
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  fun:malloc
+  fun:XInitThreads
+  ...
+}
