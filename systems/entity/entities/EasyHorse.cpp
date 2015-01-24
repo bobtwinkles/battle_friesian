@@ -26,9 +26,9 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   _body = world.CreateBody(&def);
 
   b2PolygonShape box;
-  float half_phys_w = _animations[0].GetCurrent()->GetWidth() * PHYS_SCALE / IMG_SCALE / 3
-      , half_phys_h = _animations[0].GetCurrent()->GetHeight() * PHYS_SCALE / IMG_SCALE / 3;
-  box.SetAsBox(half_phys_w, half_phys_w, b2Vec2(0, 0), 0);
+  float half_phys_w = _animations[0].GetCurrent()->GetWidth() * PHYS_SCALE / IMG_SCALE / 2
+      , half_phys_h = _animations[0].GetCurrent()->GetHeight() * PHYS_SCALE / IMG_SCALE / 2;
+  box.SetAsBox(half_phys_w, half_phys_h, b2Vec2(0, 0), 0);
 
   b2FixtureDef fixture;
   fixture.shape = &box;
@@ -52,9 +52,10 @@ void EasyHorse::Tick(GameContext & Context, double Step) {
   // Sync position between rendering and physics systems
   b2World & world = Context.GetPhysicsSystem().GetWorld();
   b2Vec2 vec = _body->GetPosition();
+  std::shared_ptr<fri::ogl::Texture> t = (*_current_animation_index)->GetCurrent();
   _renderer->SetPosition(vec.x * GFX_SCALE / PHYS_SCALE,
-                         vec.y * GFX_SCALE / PHYS_SCALE);
+                         vec.y * GFX_SCALE / PHYS_SCALE - (t->GetHeight() * GFX_SCALE / IMG_SCALE / 2));
 
   // Make sure the renderer has an up-to-date texture
-  _renderer->SetTexture((*_current_animation_index)->GetCurrent());
+  _renderer->SetTexture(t);
 }
