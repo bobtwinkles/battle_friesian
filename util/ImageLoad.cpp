@@ -1,6 +1,7 @@
 #include "ImageLoad.hpp"
 
-#include "Util.hpp"
+#include "util/Util.hpp"
+#include "ogl/Texture.hpp"
 
 #include <SDL2/SDL_image.h>
 
