@@ -4,8 +4,9 @@
 #include <iostream>
 #include <string>
 
-#include "ImageLoad.hpp"
+#include "systems/Registry.hpp"
 
+using fri::system::TextureRegistry;
 using fri::system::animation::Animation;
 
 Animation::Animation(const char * FName) {
@@ -16,11 +17,14 @@ Animation::Animation(const char * FName) {
   in >> _num_frames;
   _frames = new std::shared_ptr<fri::ogl::Texture>[_num_frames];
   _frametimes = new int[_num_frames];
+
+  TextureRegistry & reg = fri::system::GetTextureRegistry();
+
   std::cout << "Reading animation from " << name << std::endl;
   for (int i = 0; i < _num_frames; ++i) {
     in >> _frametimes[i] >> source_name;;
     std::cout << "  " << source_name << " will render for " << _frametimes[i] << " frames" << std::endl;
-    _frames[i] = fri::LoadImage(source_name.c_str());
+    _frames[i] = reg.Get(source_name.c_str());
   }
   _current_frame = 0;
   _current_internal_frame = 0;

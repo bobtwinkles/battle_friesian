@@ -1,18 +1,39 @@
 #ifndef _SYSTEM_REGISTRY_H_
 #define _SYSTEM_REGISTRY_H_
 
-#include "Util.hpp"
-
 #include <unordered_map>
 #include <string>
 #include <limits.h>
 #include <type_traits>
 
+#include "util/Util.hpp"
+#include "util/ImageLoad.hpp"
+
 namespace fri {
   namespace system {
+    namespace animation {
+      class Animation;
+    }
+
+    //default allocator for registry
+    namespace _registry_allocators {
+      template<typename T>
+      struct DefaultAllocator {
+        T operator() (const char * Name) const {
+          return T(Name);
+        }
+      };
+
+      struct TextureAllocator {
+        std::shared_ptr<fri::ogl::Texture> operator() (const char * Name) const {
+          return fri::LoadImage(Name);
+        }
+      };
+    }
+
     // T = the type to manage
     // TCreator = a functor that creates a T
-    template<typename T, typename TCreator>
+    template<typename T, typename TCreator=_registry_allocators::DefaultAllocator<T>>
     class Registry {
       private:
         // Implements FNV-1A for C strings
@@ -50,6 +71,12 @@ namespace fri {
           return it->second;
         }
     };
+
+    typedef Registry<animation::Animation> AnimationRegistry;
+    typedef Registry<std::shared_ptr<fri::ogl::Texture>, _registry_allocators::TextureAllocator> TextureRegistry;
+
+    AnimationRegistry & GetAnimationRegistry();
+    TextureRegistry & GetTextureRegistry();
   }
 }
 

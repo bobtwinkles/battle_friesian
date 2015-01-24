@@ -23,6 +23,7 @@ set(SRC Main.cpp
         construct/Parser.cpp
         flow/GameFlow.cpp
         systems/GameContext.cpp
+        systems/Registry.cpp
         systems/animation/Animation.cpp
         systems/animation/AnimationSystem.cpp
         systems/entity/EntitySystem.cpp
