@@ -37,22 +37,22 @@ TexturedVertexBuffer::~TexturedVertexBuffer() {
 }
 
 void TexturedVertexBuffer::AddVertex(TexturedVertex Vertex) {
-  _indicies.push_back(_verticies.size());
-  _verticies.push_back(Vertex);
+  _indicies.push_back(_vertices.size());
+  _vertices.push_back(Vertex);
 
   _verts_ok = false;
 }
 
 void TexturedVertexBuffer::ClearVertexData() {
   _indicies.clear();
-  _verticies.clear();
+  _vertices.clear();
 
   _verts_ok = false;
 }
 
 void TexturedVertexBuffer::AddVerticies(std::vector<TexturedVertex> Verts, std::vector<GLuint> Indicies) {
-  GLuint base = _verticies.size();
-  _verticies.insert(_verticies.end(), Verts.begin(), Verts.end());
+  GLuint base = _vertices.size();
+  _vertices.insert(_vertices.end(), Verts.begin(), Verts.end());
 
   auto it = Indicies.begin();
   while (it != Indicies.end()) {
@@ -67,7 +67,7 @@ void TexturedVertexBuffer::Sync() {
   glBindBuffer(GL_ARRAY_BUFFER, _data_buffer);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _index_buffer);
 
-  glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * _verticies.size(), _verticies.data(), _usage);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * _vertices.size(), _vertices.data(), _usage);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * _indicies.size(), _indicies.data(), _usage);
 
   _verts_ok = true;
@@ -89,7 +89,7 @@ void TexturedVertexBuffer::Render(const fri::ogl::Environment & Env) const {
   glEnableVertexAttribArray(LOC_COORDINATE);
   glEnableVertexAttribArray(LOC_COLOR);
   glVertexAttribPointer(LOC_COORDINATE, 4, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), 0);
-  glVertexAttribPointer(LOC_COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), ((char*)NULL) + (4 * sizeof(float)));
+  glVertexAttribPointer(LOC_COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(TexturedVertex), OFFSET(4));
 
   glDrawElements(_mode, _indicies.size(), GL_UNSIGNED_INT, 0);
 

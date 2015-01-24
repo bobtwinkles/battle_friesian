@@ -32,6 +32,7 @@ set(SRC Main.cpp
         systems/physics/PhysicsSystem.cpp
         systems/render/RenderSystem.cpp
         systems/render/renderables/MobileTexturedRender.cpp
+        systems/render/renderables/Box2DDebug.cpp
         metric/GPUMetric.cpp
         util/Util.cpp
         util/ImageLoad.cpp

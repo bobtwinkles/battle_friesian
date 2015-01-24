@@ -1,4 +1,6 @@
-#include "PhysicsSystem.hpp"
+#include "systems/physics/PhysicsSystem.hpp"
+
+#include "systems/render/renderables/Box2DDebug.hpp"
 
 using fri::system::GameContext;
 using fri::system::physics::PhysicsSystem;

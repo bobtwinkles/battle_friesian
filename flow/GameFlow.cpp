@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include <Box2D/Dynamics/b2World.h>
+
 #include "systems/entity/entities/EasyHorse.hpp"
 #include "construct/Parser.hpp"
 
@@ -13,6 +15,13 @@ GameFlow::GameFlow() {
   _ctx.GetEntitySystem().RegisterGameObject(h1);
   auto h2 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 6, 1);
   _ctx.GetEntitySystem().RegisterGameObject(h2);
+
+  _debug_draw = std::make_shared<fri::system::render::Box2DDebug>();
+  _debug_draw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit);
+
+  b2World & world = _ctx.GetPhysicsSystem().GetWorld();
+  world.SetDebugDraw(&(*_debug_draw));
+  _debug_draw_index = _ctx.GetRenderSystem().RegisterRenderable(_debug_draw);
 
   std::string fname = fri::GetBaseDirectory();
   fname.append("resources/levels/level0.txt");
@@ -26,6 +35,8 @@ GameFlow::~GameFlow() {
 
 void GameFlow::Tick(double Step) {
   _ctx.Tick(Step);
+  b2World & world = _ctx.GetPhysicsSystem().GetWorld();
+  world.DrawDebugData();
 }
 
 bool GameFlow::ShouldSwitch() {

@@ -12,4 +12,5 @@ void main() {
   frag_texcoord = coordinates.zw;
   frag_color = color;
   gl_Position = transform * vec4(coordinates.xy, 0, 1);
+  gl_PointSize = 3.f;
 }

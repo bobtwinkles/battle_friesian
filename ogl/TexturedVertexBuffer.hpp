@@ -29,7 +29,7 @@ namespace fri {
 
         std::shared_ptr<Texture> _texture;
 
-        std::vector<TexturedVertex> _verticies;
+        std::vector<TexturedVertex> _vertices;
         std::vector<GLuint> _indicies;
 
         bool _verts_ok;
@@ -46,6 +46,11 @@ namespace fri {
         void ClearVertexData();
 
         void SetTexture(std::shared_ptr<Texture> Tex) { _texture = Tex; }
+
+        ///WARNING: If these methods are used to modify the verticies, this class will no longer be
+        /// capable of ensuring the gpu-side structure is in sync
+        std::vector<TexturedVertex> & GetVertices() { return _vertices; }
+        std::vector<GLuint> & GetIndicies() { return _indicies; }
 
         void Sync();
 

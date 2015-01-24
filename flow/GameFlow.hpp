@@ -4,12 +4,16 @@
 #include "flow/Flow.hpp"
 
 #include "systems/GameContext.hpp"
+#include "systems/render/RenderSystem.hpp"
+#include "systems/render/renderables/Box2DDebug.hpp"
 
-namespace fri { 
+namespace fri {
   namespace flow {
     class GameFlow : public IFlow {
       private:
         fri::system::GameContext _ctx;
+        std::shared_ptr<fri::system::render::Box2DDebug> _debug_draw;
+        fri::system::render::RenderableIndex _debug_draw_index;
       public:
         GameFlow();
         ~GameFlow();

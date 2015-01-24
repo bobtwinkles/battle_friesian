@@ -77,6 +77,8 @@ namespace fri {
 
     AnimationRegistry & GetAnimationRegistry();
     TextureRegistry & GetTextureRegistry();
+
+    void InitRegistries();
   }
 }
 

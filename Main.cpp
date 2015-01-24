@@ -82,6 +82,8 @@ int main(int argc, char *argv[]) {
   fri::InitializeBaseDirectory(argv[0]);
   // Randomization
   srand(0);
+  // Registries
+  fri::system::InitRegistries();
 
   fri::flow::GameFlow * gameflow = new fri::flow::GameFlow();
 
