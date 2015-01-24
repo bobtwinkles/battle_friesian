@@ -12,14 +12,17 @@ Platform::Platform(GameContext & Context, float X, float Y, float W, float H, st
   //TODO: implement rendering
   assert(Tex == nullptr);
 
+  float half_w = W * PHYS_SCALE / GFX_SCALE / 2;
+  float half_h = H * PHYS_SCALE / GFX_SCALE / 2;
+
   b2BodyDef def;
   b2World & world = Context.GetPhysicsSystem().GetWorld();
   def.type = b2_staticBody;
-  def.position.Set(X * PHYS_SCALE / GFX_SCALE, Y * PHYS_SCALE / GFX_SCALE);
+  def.position.Set(half_w + X * PHYS_SCALE / GFX_SCALE, half_h + Y * PHYS_SCALE / GFX_SCALE);
   _body =world.CreateBody(&def);
 
   b2PolygonShape box;
-  box.SetAsBox(W * PHYS_SCALE / GFX_SCALE, H * PHYS_SCALE / GFX_SCALE);
+  box.SetAsBox(half_w, half_h);
 
   b2FixtureDef fixture;
   fixture.shape = &box;
