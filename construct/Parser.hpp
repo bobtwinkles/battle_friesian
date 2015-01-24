@@ -1,11 +1,10 @@
 #ifndef _CONSTRUCT_PARSER_H_
 #define _CONSTRUCT_PARSER_H_
 
-#include <string>
+#include <string.h>
 #include <vector>
-#include <istream>
+#include <iostream>
 
-#include "systems/GameContext.hpp"
 #include "construct/Builder.hpp"
 
 namespace fri {
@@ -183,8 +182,6 @@ namespace fri {
       }
       return root;
     }
-
-    void ParseLevel(std::istream & Input, fri::system::GameContext & Context);
   }
 }
 

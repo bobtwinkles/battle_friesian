@@ -4,13 +4,17 @@
 #include <unordered_map>
 #include <string>
 #include <limits.h>
+#include <memory>
 #include <type_traits>
 
 #include "util/Util.hpp"
-#include "util/ImageLoad.hpp"
 #include "util/StringHash.hpp"
 
 namespace fri {
+  namespace ogl {
+    class Texture;
+  }
+
   namespace system {
     namespace animation {
       class Animation;
@@ -26,9 +30,7 @@ namespace fri {
       };
 
       struct TextureAllocator {
-        std::shared_ptr<fri::ogl::Texture> operator() (const char * Name) const {
-          return fri::LoadImage(Name);
-        }
+        std::shared_ptr<fri::ogl::Texture> operator() (const char * Name) const;
       };
     }
 

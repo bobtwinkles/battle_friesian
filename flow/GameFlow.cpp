@@ -5,7 +5,7 @@
 #include <Box2D/Dynamics/b2World.h>
 
 #include "systems/entity/entities/EasyHorse.hpp"
-#include "construct/Parser.hpp"
+#include "construct/LevelParser.hpp"
 
 using fri::flow::GameFlow;
 using fri::flow::IFlow;

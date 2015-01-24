@@ -2,7 +2,9 @@
 
 using fri::system::TextureRegistry;
 using fri::system::AnimationRegistry;
+using fri::system::_registry_allocators::TextureAllocator;
 
+#include "util/ImageLoad.hpp"
 #include "systems/animation/Animation.hpp"
 
 namespace {
@@ -20,6 +22,10 @@ namespace {
 
     _texture_registry.Register("WHITE", white);
   }
+}
+
+std::shared_ptr<fri::ogl::Texture> TextureAllocator::operator() (const char * Name) const {
+  return fri::LoadImage(Name);
 }
 
 AnimationRegistry & fri::system::GetAnimationRegistry() {
