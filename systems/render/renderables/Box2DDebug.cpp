@@ -1,5 +1,7 @@
 #include "systems/render/renderables/Box2DDebug.hpp"
 
+#include <math.h>
+
 #include "systems/Registry.hpp"
 #include "systems/Scales.hpp"
 #include "systems/render/RenderSystem.hpp"
@@ -23,6 +25,7 @@ Box2DDebug::~Box2DDebug() {
 }
 
 void Box2DDebug::Render(RenderSystem & System) {
+  glLineWidth(3.f);
   _line_buffer.Sync();
   _line_buffer.Render(System.GetEnvironment());
 
@@ -34,6 +37,7 @@ void Box2DDebug::Render(RenderSystem & System) {
 
   _solid_indicies.clear();
   _solid_vertices.clear();
+  glLineWidth(1.f);
 }
 
 void Box2DDebug::DrawPolygon(const b2Vec2* Vertices, int32 VertexCount, const b2Color& Color) {
@@ -79,20 +83,104 @@ void Box2DDebug::DrawSolidPolygon(const b2Vec2* Vertices, int32 VertexCount, con
       _solid_indicies.push_back(base + i + 1);
     }
   }
+
+  DrawPolygon(Vertices, VertexCount, Color);
 }
 
+#define CIRCLE_ELEMENTS 16
+
 void Box2DDebug::DrawCircle(const b2Vec2 & Center, float32 Radius, const b2Color& Color) {
-  std::cout << "Circle" << std::endl;
+  float theta;
+  fri::ogl::TexturedVertex v;
+  GLuint base = _line_vertices.size();
+
+  Radius *= GFX_SCALE / PHYS_SCALE;
+  float base_x = Center.x * GFX_SCALE / PHYS_SCALE;
+  float base_y = Center.y * GFX_SCALE / PHYS_SCALE;
+
+  v.u = 1.f;
+  v.v = 1.f;
+  v.r = Color.r;
+  v.g = Color.g;
+  v.b = Color.b;
+  v.a = Color.a;
+
+  for (int i = 0; i < CIRCLE_ELEMENTS; ++i) {
+    theta = 2 * M_PI * i / float(CIRCLE_ELEMENTS);
+    v.x = base_x + Radius * cosf(theta);
+    v.y = base_y + Radius * sinf(theta);
+    _line_vertices.push_back(v);
+    _line_indicies.push_back(base + i);
+    _line_indicies.push_back(base + (i + 1) % CIRCLE_ELEMENTS);
+  }
 }
 
 void Box2DDebug::DrawSolidCircle(const b2Vec2 & Center, float32 Radius, const b2Vec2 & Axis, const b2Color& Color) {
-  std::cout << "SolidCircle" << std::endl;
+  float theta;
+  fri::ogl::TexturedVertex v;
+  GLuint base = _solid_vertices.size();
+
+  Radius *= GFX_SCALE / PHYS_SCALE;
+  float base_x = Center.x * GFX_SCALE / PHYS_SCALE;
+  float base_y = Center.y * GFX_SCALE / PHYS_SCALE;
+
+  v.x = base_x;
+  v.y = base_y;
+  v.u = 1.f;
+  v.v = 1.f;
+  v.r = Color.r;
+  v.g = Color.g;
+  v.b = Color.b;
+  v.a = Color.a * 0.5;
+
+  _solid_vertices.push_back(v);
+  for (auto i = 0; i < CIRCLE_ELEMENTS; ++i) {
+    theta = 2 * M_PI * i / float(CIRCLE_ELEMENTS);
+    v.x = base_x + Radius * cosf(theta);
+    v.y = base_y + Radius * sinf(theta);
+    _solid_vertices.push_back(v);
+    _solid_indicies.push_back(base);
+    _solid_indicies.push_back(base + i);
+    _solid_indicies.push_back(base + i + 1);
+  }
+
+  _solid_indicies.push_back(base);
+  _solid_indicies.push_back(base + CIRCLE_ELEMENTS);
+  _solid_indicies.push_back(base + 1);
+
+  // border
+  DrawCircle(Center, Radius * PHYS_SCALE / GFX_SCALE, Color);
+  // pointer
+  float scale = (PHYS_SCALE / GFX_SCALE) * Radius / Axis.Length();
+  DrawSegment(Center, Center + scale * Axis, Color);
 }
 
 void Box2DDebug::DrawSegment(const b2Vec2 & P1, const b2Vec2 & P2, const b2Color& Color) {
-  std::cout << "Segment" << std::endl;
+  fri::ogl::TexturedVertex v;
+  GLuint base = _line_vertices.size();
+
+  v.x = P1.x * GFX_SCALE / PHYS_SCALE;
+  v.y = P1.y * GFX_SCALE / PHYS_SCALE;
+  v.u = 1.f;
+  v.v = 1.f;
+  v.r = Color.r;
+  v.g = Color.g;
+  v.b = Color.b;
+  v.a = Color.a;
+
+  _line_vertices.push_back(v);
+
+  v.x = P2.x * GFX_SCALE / PHYS_SCALE;
+  v.y = P2.y * GFX_SCALE / PHYS_SCALE;
+
+  _line_vertices.push_back(v);
+
+  _line_indicies.push_back(base + 0);
+  _line_indicies.push_back(base + 1);
 }
 
 void Box2DDebug::DrawTransform(const b2Transform & Trans) {
-  std::cout << "Transform" << std::endl;
+  float rot_x = 0.1 * Trans.q.GetXAxis().x;
+  float rot_y = 0.1 * Trans.q.GetXAxis().y;
+  DrawSolidCircle(Trans.p, 0.1, b2Vec2(rot_x, rot_y), b2Color(1, 1, 1, 1));
 }
