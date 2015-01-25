@@ -1,6 +1,9 @@
 #ifndef _UTIL_STRINGHASH_H_
 #define _UTIL_STRINGHASH_H_
 
+#include <cstddef>
+#include <climits>
+
 namespace fri {
   namespace util {
     // Implements FNV-1A for C strings
