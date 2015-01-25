@@ -8,10 +8,9 @@
 
 #include "util/ImageLoad.hpp"
 
-using fri::construct::BuildParseTree;
 using fri::construct::IBuilder;
 using fri::construct::ParseError;
-using fri::construct::ParseTreeNode;
+using fri::construct::ParseTree;
 using fri::system::GameContext;
 
 namespace {
@@ -19,7 +18,7 @@ namespace {
     virtual const char * GetKeyword() const { return "BG"; }
     virtual ParseError Visit(const char * Line, GameContext & Affect) {
       char file_path[1024];
-      int parse = sscanf(Line, " %1023s", file_path);
+      int parse = sscanf(Line, "BG %1023s", file_path);
       if (parse != 1) {
         return ParseError(0, 0, "BG must be followed by a path (no spaces!)");
       }
@@ -35,7 +34,7 @@ namespace {
     virtual ParseError Visit(const char * Line, GameContext & Affect) {
       float x, y, w, h;
       char file_path[1024];
-      int parse = sscanf(Line, " %f %f %f %f %1023s", &x, &y, &w, &h, file_path);
+      int parse = sscanf(Line, "PLATFORM %f %f %f %f %1023s", &x, &y, &w, &h, file_path);
       if (parse < 5) {
         return ParseError(0, 0, "Platform must have \"x y w h image\" image can be NOIMG to indicate that this wall is invisible");
       }
@@ -57,7 +56,7 @@ namespace {
   BackgroundParser BG_PARSER;
   PlatformParser   PLATFORM_PARSER;
 
-  ParseTreeNode<GameContext> context_parser = BuildParseTree<GameContext>(std::vector<IBuilder<GameContext>*>( {
+  ParseTree<GameContext> context_parser(std::vector<IBuilder<GameContext>*>( {
           &PLATFORM_PARSER,
           &BG_PARSER,
         }));

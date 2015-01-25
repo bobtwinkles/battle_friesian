@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "construct/Builder.hpp"
+#include "util/Tree.hpp"
 
 namespace fri {
   namespace construct {
@@ -35,153 +36,95 @@ namespace fri {
 
     // T is the type of thing that will be affected by parsing
     template<typename T>
-    class ParseTreeNode {
+    class ParseTree {
       private:
-        std::vector<ParseTreeNode> _children;
-        char _char;
-        IBuilder<T> * _val;
+        fri::util::Tree<char, IBuilder<T>*> _parse_tree;
+        // Keep track of all the nodes we allocate so we can delete them
+        std::vector<fri::util::Tree<char, IBuilder<T>*>*> _nodes;
       public:
-        ParseTreeNode(char Char, IBuilder<T> * Parser) {
-          _char = Char;
-          _val = Parser;
-        }
+        ParseTree(std::vector<IBuilder<T>*> Builders) :
+          _parse_tree(0, nullptr) {
+          // TODO
+          for (auto builder : Builders) {
+            const char * keyword = builder->GetKeyword();
+            int depth = 0;
+            int max_depth = strlen(keyword);
 
-        ParseTreeNode(const ParseTreeNode & Node) {
-          _char = Node._char;
-          _val = Node._val;
-          _children = Node._children;
-        }
+            std::cout << "Adding builder for keyword " << keyword << std::endl;
 
-        ParseTreeNode(const ParseTreeNode && Node) {
-          _children = std::move(Node._children);
-          _char = Node._char;
-          _val = Node._val;
-        }
+            fri::util::Tree<char, IBuilder<T>*> * current = &_parse_tree;
+            fri::util::Tree<char, IBuilder<T>*> * next = &_parse_tree;
+            fri::util::Tree<char, IBuilder<T>*> * create;
+            // Descend to the lowest part of the tree
+            while (depth < max_depth && (next = current->GetChild(keyword[depth])) != nullptr) {
+              current = next;
+              ++depth;
+            }
 
-        ~ParseTreeNode() {
-        }
-
-        ParseTreeNode<T> & operator=(const ParseTreeNode & Node) {
-          ParseTreeNode<T> temp(Node);
-          std::swap(temp, *this);
-          return *this;
-        }
-
-        ParseTreeNode<T> & operator=(const ParseTreeNode && Node) {
-          _children = std::move(Node._children);
-          _char = Node._char;
-          _val = Node._val;
-          return *this;
-        }
-
-        void AddChild(const ParseTreeNode<T> & Child) {
-          std::cout << _char << " will have child at " << Child._char << std::endl;
-          if (_children.size() == 0) {
-            _children.push_back(Child);
-            return;
-          }
-          auto it = _children.begin();
-          while ((*it)._char < Child._char) {
-            ++it;
-          }
-          _children.insert(it, Child);
-        }
-
-        ParseTreeNode<T> * GetChild(char C) {
-          if (_children.size() == 0) {
-            return nullptr;
-          }
-          int beg = 0;
-          int end = _children.size() - 1;
-          int cur = (beg + end) / 2;
-          while (_children[cur]._char != C) {
-            char cur_char = _children[cur]._char;
-            if (end - beg <= 1) {
-              if (cur_char == C) {
-                return &_children[cur];
-              } else if (_children[end]._char == C){
-                return &_children[end];
-              } else {
-                return nullptr;
+            if (depth == max_depth) { // we are shorter than the depth of the tree... oops
+              if (current->GetChild(' ') != nullptr) {
+                std::cerr << "Duplicate key " << keyword << std::endl;
+                abort();
               }
-            }
-            if (cur_char < C) {
-              end = cur;
+
+              create = new fri::util::Tree<char, IBuilder<T>*>(' ', builder);
+              _nodes.push_back(create);
+              current->AddChild(create);
             } else {
-              beg = cur;
+              if (current->GetValue() != nullptr) { // There is already a thing that thinks it's the lowest possible here
+                IBuilder<T> * old = current->GetValue();
+                current->SetValue(nullptr); // no longer the lowest
+
+                const char * old_keyword = old->GetKeyword();
+
+                if (!strcmp(old_keyword, keyword)) {
+                  std::cout << "Duplicate key " << keyword << std::cerr;
+                  abort();
+                }
+
+                char next_char;
+                if (strlen(old_keyword) >= depth) {
+                  next_char = ' ';
+                } else {
+                  next_char = old_keyword[depth];
+                }
+
+                create = new fri::util::Tree<char, IBuilder<T>*>(next_char, old);
+                _nodes.push_back(create);
+                current->AddChild(create);
+              }
+              create = new fri::util::Tree<char, IBuilder<T>*>(keyword[depth], builder);
+              _nodes.push_back(create);
+              current->AddChild(create);
             }
-            cur = (beg + end) / 2;
           }
-          return &_children[cur];
         }
 
-        inline IBuilder<T> * GetVal() const { return _val; }
-        inline void SetVal(IBuilder<T> * Val) { _val = Val; }
+        ~ParseTree() {
+          for (auto i : _nodes) {
+            delete i;
+          }
+        }
 
-        ParseError Visit(const char * Line, T & Affect) {
-          if (_val) {
-            // Advance to find the first whitespace
-            while (*Line != ' ' && *Line != '\t' && *Line != 0) ++Line;
-            return _val->Visit(Line, Affect);
+        ParseError Visit(const char* Line, T & Context) {
+          fri::util::Tree<char, IBuilder<T>*> * curr = &_parse_tree;
+          fri::util::Tree<char, IBuilder<T>*> * next = &_parse_tree;
+          int depth = 0;
+          while (!curr->GetValue() && Line[depth] && (next = curr->GetChild(Line[depth]))) {
+            curr = next;
+            ++depth;
           }
-          ParseTreeNode<T> * child = GetChild(*Line);
-          if (child == nullptr) {
-            std::cerr << "Couldn't find parser for " << Line << std::endl;;
+          if (!Line[depth]) {
+            return ParseError(0, depth, "Reached end of line without matching parser");
           }
-          return child->Visit(Line + 1, Affect);
+          IBuilder<T> * val = curr->GetValue();
+          if (!val) {
+            return ParseError(0, depth, "Failed to match a pattern");
+          }
+          return val->Visit(Line, Context);
         }
     };
 
-    template<typename T>
-    ParseTreeNode<T> BuildParseTree(const std::vector<IBuilder<T>*> & Builders) {
-      ParseTreeNode<T> root = ParseTreeNode<T>(0, nullptr);
-      for (auto builder : Builders) {
-        const char * keyword = builder->GetKeyword();
-        int depth = 0;
-        int max_depth = strlen(keyword);
-
-        std::cout << "Adding builder for keyword " << keyword << std::endl;
-
-        ParseTreeNode<T> * current = &root;
-        ParseTreeNode<T> * next = nullptr;
-        // Descend to the lowest part of the tree
-        while (depth < max_depth && (next = current->GetChild(keyword[depth])) != nullptr) {
-          current = next;
-          ++depth;
-        }
-
-        if (depth == max_depth) { // we are shorter than the depth of the tree... oops
-          if (current->GetChild(' ') != nullptr) {
-            std::cerr << "Duplicate key " << keyword << std::endl;
-            abort();
-          }
-          current->AddChild(ParseTreeNode<T>(' ', builder));
-        } else {
-          if (current->GetVal() != nullptr) { // There is already a thing that thinks it's the lowest possible here
-            IBuilder<T> * old = current->GetVal();
-            current->SetVal(nullptr); // no longer the lowest
-
-            const char * old_keyword = old->GetKeyword();
-
-            if (!strcmp(old_keyword, keyword)) {
-              std::cout << "Duplicate key " << keyword << std::cerr;
-              abort();
-            }
-
-            char next_char;
-            if (strlen(old_keyword) >= depth) {
-              next_char = ' ';
-            } else {
-              next_char = old_keyword[depth];
-            }
-
-            current->AddChild(ParseTreeNode<T>(next_char, old));
-          }
-          current->AddChild(ParseTreeNode<T>(keyword[depth], builder));
-        }
-      }
-      return root;
-    }
   }
 }
 
