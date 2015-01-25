@@ -4,10 +4,9 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include <type_traits>
 
 #include "util/Util.hpp"
-#include "util/StringHash.hpp"
+#include "util/Hash.hpp"
 
 namespace fri {
   namespace ogl {
@@ -38,7 +37,7 @@ namespace fri {
     template<typename T, typename TCreator=_registry_allocators::DefaultAllocator<T>>
     class Registry {
       private:
-        std::unordered_map<const char *, T, fri::util::StringHash> _storage;
+        std::unordered_map<const char *, T, fri::util::FNVHash<const char *>> _storage;
         TCreator _constructor;
 
         DISALLOW_COPY_AND_ASSIGN(Registry);
