@@ -1,13 +1,13 @@
 #ifndef _SYSTEMS_RENDER_RENDERSYSTEM_H_
 #define _SYSTEMS_RENDER_RENDERSYSTEM_H_
 
-#include "AnimationSystem.hpp"
-#include "Environment.hpp"
-#include "Renderable.hpp"
-#include "Shader.hpp"
-#include "System.hpp"
-#include "TexturedVertexBuffer.hpp"
-#include "Util.hpp"
+#include "ogl/Environment.hpp"
+#include "ogl/Shader.hpp"
+#include "ogl/TexturedVertexBuffer.hpp"
+#include "systems/System.hpp"
+#include "systems/animation/Animation.hpp"
+#include "systems/render/Renderable.hpp"
+#include "util/Util.hpp"
 
 #include <memory>
 #include <list>

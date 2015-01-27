@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "Texture.hpp"
+#include "ogl/Texture.hpp"
 
 namespace fri {
   namespace system {

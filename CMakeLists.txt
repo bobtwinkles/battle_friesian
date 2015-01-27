@@ -50,16 +50,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include_directories(SYSTEM ${FONTCONFIG_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_freetype2} ${GLM_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
 
-include_directories(${CMAKE_SOURCE_DIR}
-                    ${CMAKE_SOURCE_DIR}/ogl
-                    ${CMAKE_SOURCE_DIR}/ogl/ui
-                    ${CMAKE_SOURCE_DIR}/metric
-                    ${CMAKE_SOURCE_DIR}/systems
-                    ${CMAKE_SOURCE_DIR}/systems/animation
-                    ${CMAKE_SOURCE_DIR}/systems/entity
-                    ${CMAKE_SOURCE_DIR}/systems/physics
-                    ${CMAKE_SOURCE_DIR}/systems/render
-                    ${CMAKE_SOURCE_DIR}/util)
+include_directories(${CMAKE_SOURCE_DIR} )
+#                    ${CMAKE_SOURCE_DIR}/ogl
+#                    ${CMAKE_SOURCE_DIR}/ogl/ui
+#                    ${CMAKE_SOURCE_DIR}/metric
+#                    ${CMAKE_SOURCE_DIR}/systems
+#                    ${CMAKE_SOURCE_DIR}/systems/animation
+#                    ${CMAKE_SOURCE_DIR}/systems/entity
+#                    ${CMAKE_SOURCE_DIR}/systems/physics
+#                    ${CMAKE_SOURCE_DIR}/systems/render
+#                    ${CMAKE_SOURCE_DIR}/util)
 
 add_executable(friesian ${SRC})
 

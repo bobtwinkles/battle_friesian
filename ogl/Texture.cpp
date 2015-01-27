@@ -1,4 +1,4 @@
-#include "Texture.hpp"
+#include "ogl/Texture.hpp"
 
 using fri::ogl::Texture;
 

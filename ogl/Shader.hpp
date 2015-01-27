@@ -8,7 +8,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
-#include "Util.hpp"
+#include "util/Util.hpp"
 
 //// ----
 // Shader features

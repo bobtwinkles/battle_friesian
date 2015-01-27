@@ -1,9 +1,8 @@
 #include "RenderSystem.hpp"
 
-#include "GameContext.hpp"
-#include "ImageLoad.hpp"
-
-#include "OGLUtil.hpp"
+#include "ogl/OGLUtil.hpp"
+#include "systems/GameContext.hpp"
+#include "util/ImageLoad.hpp"
 
 #include <GL/glew.h>
 

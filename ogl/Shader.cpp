@@ -5,7 +5,7 @@
 #include <set>
 #include <utility>
 
-#include "OGLUtil.hpp"
+#include "ogl/OGLUtil.hpp"
 
 using fri::ogl::Shader;
 using fri::ogl::ShaderSource;

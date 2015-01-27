@@ -1,7 +1,7 @@
 #ifndef _OGL_TEXT_H_
 #define _OGL_TEXT_H_
 
-#include "Environment.hpp"
+#include "ogl/Environment.hpp"
 
 namespace fri {
   namespace ogl {

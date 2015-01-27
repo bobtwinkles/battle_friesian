@@ -1,6 +1,6 @@
 #include "AnimationSystem.hpp"
 
-#include "GameContext.hpp"
+#include "systems/GameContext.hpp"
 
 using fri::system::animation::Animation;
 using fri::system::animation::AnimationIndex;

@@ -1,6 +1,6 @@
-#include "Graph.hpp"
+#include "ogl/ui/Graph.hpp"
 
-#include "GPUMetric.hpp"
+#include "metric/GPUMetric.hpp"
 #include <math.h>
 
 using fri::ogl::ui::MetricGraph;

@@ -2,7 +2,7 @@
 #define _METRIC_H_
 
 #include <GL/glew.h>
-#include "Util.hpp"
+#include "util/Util.hpp"
 
 namespace fri {
   namespace ogl {

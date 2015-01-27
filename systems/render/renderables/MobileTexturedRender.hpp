@@ -1,9 +1,9 @@
 #ifndef _SYSTEM_RENDER_RENDERABLES_MOBILE_TEXTURE_RENDER_H_
 #define _SYSTEM_RENDER_RENDERABLES_MOBILE_TEXTURE_RENDER_H_
 
-#include "Renderable.hpp"
-#include "Texture.hpp"
-#include "TexturedVertexBuffer.hpp"
+#include "ogl/Texture.hpp"
+#include "ogl/TexturedVertexBuffer.hpp"
+#include "systems/render/Renderable.hpp"
 
 namespace fri {
   namespace system {

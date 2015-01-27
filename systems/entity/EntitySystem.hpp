@@ -1,8 +1,8 @@
 #ifndef _SYSTEMS_ENTITY_ENTITYSYSTEM_H_
 #define _SYSTEMS_ENTITY_ENTITYSYSTEM_H_
 
-#include "System.hpp"
-#include "GameObject.hpp"
+#include "systems/System.hpp"
+#include "systems/entity/GameObject.hpp"
 
 #include <list>
 #include <memory>

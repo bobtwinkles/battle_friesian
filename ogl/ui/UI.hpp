@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 
-#include "Environment.hpp"
+#include "ogl/Environment.hpp"
 
 namespace fri {
   namespace ogl {

@@ -1,8 +1,9 @@
 #ifndef _PHYSICS_SYSYEM_H_
 #define _PHYSICS_SYSYEM_H_
 
-#include "System.hpp"
 #include <Box2D/Box2D.h>
+
+#include "systems/System.hpp"
 
 namespace fri {
   namespace system {

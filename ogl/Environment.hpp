@@ -1,9 +1,9 @@
 #ifndef _OGL_ENVIRONMENT_H_
 #define _OGL_ENVIRONMENT_H_
 
-#include "Util.hpp"
+#include "util/Util.hpp"
 
-#include "Shader.hpp"
+#include "ogl/Shader.hpp"
 
 namespace fri {
   namespace ogl {

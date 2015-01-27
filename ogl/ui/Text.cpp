@@ -1,7 +1,7 @@
-#include "Text.hpp"
+#include "ogl/ui/Text.hpp"
 
-#include "Shader.hpp"
-#include "OGLUtil.hpp"
+#include "ogl/Shader.hpp"
+#include "ogl/OGLUtil.hpp"
 
 #include <GL/glew.h>
 

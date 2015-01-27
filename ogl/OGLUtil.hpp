@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "Util.hpp"
+#include "util/Util.hpp"
 
 #define GLERR() { \
     int the_gl_error_pls = glGetError(); \

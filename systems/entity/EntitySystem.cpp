@@ -1,4 +1,4 @@
-#include "EntitySystem.hpp"
+#include "systems/entity/EntitySystem.hpp"
 
 using fri::system::GameContext;
 using fri::system::entity::EntitySystem;

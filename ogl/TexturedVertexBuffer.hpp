@@ -7,10 +7,10 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
-#include "Util.hpp"
+#include "util/Util.hpp"
 
-#include "Environment.hpp"
-#include "Texture.hpp"
+#include "ogl/Environment.hpp"
+#include "ogl/Texture.hpp"
 
 namespace fri {
   namespace ogl {

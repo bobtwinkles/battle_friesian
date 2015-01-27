@@ -1,9 +1,9 @@
 #ifndef _SYSTEM_ANIMATION_ANIMATION_SYSTEM_H_
 #define _SYSTEM_ANIMATION_ANIMATION_SYSTEM_H_
 
-#include "Animation.hpp"
-#include "System.hpp"
-#include "Registry.hpp"
+#include "systems/animation/Animation.hpp"
+#include "systems/System.hpp"
+#include "systems/Registry.hpp"
 
 #include <list>
 

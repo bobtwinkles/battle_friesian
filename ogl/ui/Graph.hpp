@@ -3,9 +3,9 @@
 
 #include <GL/glew.h>
 
-#include "Util.hpp"
-#include "Environment.hpp"
-#include "UI.hpp"
+#include "ogl/Environment.hpp"
+#include "ogl/ui/UI.hpp"
+#include "util/Util.hpp"
 
 namespace fri {
   namespace metric {

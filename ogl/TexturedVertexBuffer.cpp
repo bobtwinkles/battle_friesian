@@ -1,6 +1,6 @@
 #include "TexturedVertexBuffer.hpp"
 
-#include "OGLUtil.hpp"
+#include "ogl/OGLUtil.hpp"
 
 #include <cassert>
 
