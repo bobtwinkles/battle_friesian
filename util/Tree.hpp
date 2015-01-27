@@ -17,7 +17,7 @@ namespace fri {
         const KeyType _key;
         ValueType _value;
       public:
-        ChainTreeNode(KeyType & Key, ValueType Value) :
+        ChainTreeNode(const KeyType & Key, ValueType Value) :
           _key(Key) {
           _value = Value;
           _parent = nullptr;
@@ -57,6 +57,27 @@ namespace fri {
         ~ChainTree() {
           for (auto i : _nodes) {
             delete i;
+          }
+        }
+
+        // Returns the matched node and the length of the key sequence leading up to the matched node
+        std::pair<ChainTreeNode<KeyType, ValueType> *, int> FirstMatch(const KeyType * KeyChain, int KeyChainLength) {
+          ChainTreeNode<KeyType, ValueType> * current = &_root;
+          ChainTreeNode<KeyType, ValueType> * next;
+          int depth = 0;
+          bool found = false;
+          while (!found && depth < KeyChainLength &&
+                (next = current->GetChild(KeyChain[depth]))) {
+            current = next;
+            if (current->GetKey() == LeafKey || current->GetValue() != DefaultValue) {
+              found = true;
+            }
+            ++depth;
+          }
+          if (!found) {
+            return std::make_pair(nullptr, 0);
+          } else {
+            return std::make_pair(current, depth);
           }
         }
 

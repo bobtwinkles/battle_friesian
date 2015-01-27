@@ -1,11 +1,12 @@
 #ifndef _SYSTEM_GAMECONTEXT_H_
 #define _SYSTEM_GAMECONTEXT_H_
 
-#include "Util.hpp"
-#include "RenderSystem.hpp"
-#include "AnimationSystem.hpp"
-#include "EntitySystem.hpp"
-#include "PhysicsSystem.hpp"
+#include "util/Util.hpp"
+#include "systems/animation/AnimationSystem.hpp"
+#include "systems/entity/EntitySystem.hpp"
+#include "systems/input/InputSystem.hpp"
+#include "systems/physics/PhysicsSystem.hpp"
+#include "systems/render/RenderSystem.hpp"
 
 namespace fri {
   namespace system {
@@ -15,6 +16,7 @@ namespace fri {
         fri::system::render::RenderSystem _render;
         fri::system::entity::EntitySystem _entity;
         fri::system::physics::PhysicsSystem _physics;
+        fri::system::input::InputSystem _input;
         double _current_time;
 
         DISALLOW_COPY_AND_ASSIGN(GameContext);
