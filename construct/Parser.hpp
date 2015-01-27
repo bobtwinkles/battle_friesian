@@ -38,7 +38,7 @@ namespace fri {
     template<typename T>
     class ParseTree {
       private:
-        fri::util::ChainTree<const char, IBuilder<T>*, nullptr> _parse_tree;
+        fri::util::ChainTree<const char, IBuilder<T>*, ' ', nullptr> _parse_tree;
       public:
         ParseTree(std::vector<IBuilder<T>*> Builders) :
           _parse_tree(0, nullptr) {

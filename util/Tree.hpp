@@ -2,10 +2,10 @@
 #define _UTIL_TREE_H_
 
 #include <array>
-#include <map>
-#include <vector>
 #include <cassert>
 #include <functional>
+#include <map>
+#include <vector>
 
 namespace fri {
   namespace util {
@@ -14,7 +14,7 @@ namespace fri {
       private:
         std::map<KeyType, ChainTreeNode<KeyType, ValueType>* > _children;
         ChainTreeNode<KeyType, ValueType> * _parent;
-        KeyType _key;
+        const KeyType _key;
         ValueType _value;
       public:
         ChainTreeNode(KeyType & Key, ValueType Value) :
@@ -44,7 +44,7 @@ namespace fri {
         inline void SetValue(const ValueType & Value) { _value = Value; }
     };
 
-    template<typename KeyType, typename ValueType, ValueType DefaultValue>
+    template<typename KeyType, typename ValueType, KeyType LeafKey, ValueType DefaultValue>
     class ChainTree {
       private:
         ChainTreeNode<KeyType, ValueType> _root;
@@ -64,12 +64,16 @@ namespace fri {
           ChainTreeNode<KeyType, ValueType> * current = &_root;
           ChainTreeNode<KeyType, ValueType> * next;
           int depth = 0;
-          while (depth < KeyChainLength &&
+          bool found = false;
+          while (!found && depth < KeyChainLength &&
                 (next = current->GetChild(KeyChain[depth]))) {
             current = next;
+            if (current->GetKey() == LeafKey) {
+              found = true;
+            }
             ++depth;
           }
-          if (depth >= KeyChainLength) {
+          if (!found) {
             return nullptr;
           } else {
             return current;
@@ -96,13 +100,14 @@ namespace fri {
             return std::make_pair(nullptr, E_AMBIGUOUS_KEY);
           }
 
-          while (depth < KeyChainLength - 1) {
+          while (depth < KeyChainLength) {
             next = new ChainTreeNode<KeyType, ValueType>(KeyChain[depth], DefaultValue);
             _nodes.push_back(next);
             current->AddChild(next);
             current = next;
+            ++depth;
           }
-          next = new ChainTreeNode<KeyType, ValueType>(KeyChain[depth], DefaultValue);
+          next = new ChainTreeNode<KeyType, ValueType>(LeafKey, Value);
           _nodes.push_back(next);
           current->AddChild(next);
           return std::make_pair(next, E_SUCCESS);
