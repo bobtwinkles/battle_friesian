@@ -1,36 +1,37 @@
 #ifndef _UTIL_TREE_H_
 #define _UTIL_TREE_H_
 
+#include <array>
 #include <map>
 #include <vector>
 #include <cassert>
+#include <functional>
 
 namespace fri {
   namespace util {
     template<typename KeyType, typename ValueType>
-    class TreeNode {
+    class ChainTreeNode {
       private:
-        std::map<KeyType, TreeNode<KeyType, ValueType>* > _children;
-        TreeNode<KeyType, ValueType> * _parent;
-        ValueType _value;
+        std::map<KeyType, ChainTreeNode<KeyType, ValueType>* > _children;
+        ChainTreeNode<KeyType, ValueType> * _parent;
         KeyType _key;
-
+        ValueType _value;
       public:
-        TreeNode(KeyType Key, ValueType Value) {
-          _key = Key;
+        ChainTreeNode(KeyType & Key, ValueType Value) :
+          _key(Key) {
           _value = Value;
           _parent = nullptr;
         }
 
-        ~TreeNode() {
+        ~ChainTreeNode() {
         }
 
-        void AddChild(TreeNode<KeyType, ValueType> * Child) {
+        void AddChild(ChainTreeNode<KeyType, ValueType> * Child) {
           Child->_parent = this;
           _children.insert(std::make_pair(Child->_key, Child));
         }
 
-        TreeNode<KeyType, ValueType> * GetChild(KeyType K) {
+        ChainTreeNode<KeyType, ValueType> * GetChild(KeyType K) {
           auto a = _children.find(K);
           if (a == _children.end()) {
             return nullptr;
@@ -43,77 +44,68 @@ namespace fri {
         inline void SetValue(const ValueType & Value) { _value = Value; }
     };
 
-    template<typename KeyType, typename ValueType>
-    class Tree {
+    template<typename KeyType, typename ValueType, ValueType DefaultValue>
+    class ChainTree {
       private:
-        TreeNode<KeyType, ValueType> _root;
-        std::vector<TreeNode<KeyType, ValueType> *> _nodes;
+        ChainTreeNode<KeyType, ValueType> _root;
+        std::vector<ChainTreeNode<KeyType, ValueType> *> _nodes;
       public:
-        Tree(KeyType RootKey, ValueType RootValue) :
+        ChainTree(KeyType RootKey, ValueType RootValue) :
           _root(RootKey, RootValue) {
         }
 
-        ~Tree() {
+        ~ChainTree() {
           for (auto i : _nodes) {
             delete i;
           }
         }
 
-        ValueType * GetValueTerminator(KeyType * Keys, KeyType Terminator) {
-          assert(Terminator);
-          return GetValueCustom(Keys, [&] (int depth, TreeNode<KeyType, ValueType> current) { return Keys[depth] == Terminator; } );
-        }
-
-        TreeNode<KeyType, ValueType> * GetValueMaxKeys(KeyType * Keys, int MaxKeys) {
-          assert(MaxKeys > 0);
-          return GetValueCustom(Keys, [&] (int depth, TreeNode<KeyType, ValueType> current) { return depth == MaxKeys - 1; } );
-        }
-
-        // The Accept() function gets (current_depth, current_node)
-        TreeNode<KeyType, ValueType> * GetValue(KeyType * Keys, bool (*Accept)(int, TreeNode<KeyType, ValueType>&)) {
-          assert(Accept != nullptr);
-          TreeNode<KeyType, ValueType> * current = &_root;
-          TreeNode<KeyType, ValueType> * next;
+        ChainTreeNode<KeyType, ValueType> * Get(const KeyType * KeyChain, int KeyChainLength) {
+          ChainTreeNode<KeyType, ValueType> * current = &_root;
+          ChainTreeNode<KeyType, ValueType> * next;
           int depth = 0;
-          while (!Accept(Keys, depth, *current) &&
-                 (next = current->GetChild(Keys[depth]))) {
+          while (depth < KeyChainLength &&
+                (next = current->GetChild(KeyChain[depth]))) {
             current = next;
             ++depth;
           }
-          if (!Accept(Keys, depth, current)) {
+          if (depth >= KeyChainLength) {
             return nullptr;
           } else {
             return current;
           }
         }
 
-        // Abort is called to determine whether or not the next key as specified by Keys[arg0] should be inserted
-        //   arg1 is the prospective parent of the current node.
-        //   should return true if arg0[arg1] should not be inserted
-        // ValueFor is called to determine what value should be inserted for a given key (Keys[arg0])
-        TreeNode<KeyType, ValueType> * Insert(KeyType * Keys, bool (*Abort)(int, TreeNode<KeyType, ValueType> &), ValueType & (*ValueFor)(int, TreeNode<KeyType, ValueType> &)) {
-          assert(Abort != nullptr);
-          assert(ValueFor != nullptr);
-          TreeNode<KeyType, ValueType> * current = &_root;
-          TreeNode<KeyType, ValueType> * next;
+        enum InsertFailure {
+          E_SUCCESS = 0,
+          E_AMBIGUOUS_KEY,
+        };
+
+        std::pair<ChainTreeNode<KeyType, ValueType> *, InsertFailure> Insert(const KeyType * KeyChain, int KeyChainLength, ValueType & Value) {
+          ChainTreeNode<KeyType, ValueType> * current = &_root;
+          ChainTreeNode<KeyType, ValueType> * next;
           int depth = 0;
 
-          while (!Abort(depth, *current) &&
-                 ((next = current->GetChild(Keys[depth])))) {
+          while (depth < KeyChainLength &&
+                 (next = current->GetChild(KeyChain[depth]))) {
             current = next;
             ++depth;
           }
 
-          if (Abort(depth, *current)) {
-            return nullptr;
+          if (depth >= KeyChainLength) {
+            return std::make_pair(nullptr, E_AMBIGUOUS_KEY);
           }
 
-          while (!Abort(depth, *current)) {
-            next = new TreeNode<KeyType, ValueType>(Keys[depth], ValueFor(depth, *current));
+          while (depth < KeyChainLength - 1) {
+            next = new ChainTreeNode<KeyType, ValueType>(KeyChain[depth], DefaultValue);
             _nodes.push_back(next);
             current->AddChild(next);
-            ++depth;
+            current = next;
           }
+          next = new ChainTreeNode<KeyType, ValueType>(KeyChain[depth], DefaultValue);
+          _nodes.push_back(next);
+          current->AddChild(next);
+          return std::make_pair(next, E_SUCCESS);
         }
     };
   }
