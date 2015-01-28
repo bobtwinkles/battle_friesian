@@ -32,6 +32,7 @@ namespace fri {
         fri::system::render::RenderSystem & GetRenderSystem () { return _render; }
         fri::system::entity::EntitySystem & GetEntitySystem () { return _entity; }
         fri::system::physics::PhysicsSystem & GetPhysicsSystem() { return _physics; }
+        fri::system::input::InputSystem & GetInputSystem() { return _input; }
 
         double GetCurrentTime() { return _current_time; }
     };

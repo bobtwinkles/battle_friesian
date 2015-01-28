@@ -3,10 +3,12 @@
 
 #include <unordered_map>
 #include <list>
+#include <set>
 
 #include <SDL2/SDL_keyboard.h>
 
 #include "systems/System.hpp"
+#include "util/Hash.hpp"
 #include "util/Tree.hpp"
 
 namespace fri {
@@ -25,7 +27,8 @@ namespace fri {
         INPUT_JUMP,
       };
 
-      typedef void (*InputResponse) (fri::system::GameContext & Context, const InputAction * Action);
+      //typedef void (*InputResponse) (fri::system::GameContext & Context, const InputAction * Action);
+      typedef std::function<void(fri::system::GameContext & Context, const InputAction * Action)>* InputResponse;
 
       struct InputEvent {
         double input_frame;
@@ -38,22 +41,24 @@ namespace fri {
         public:
         private:
           std::unordered_map<SDL_Keycode, InputAction> _input_mappings;
+          std::unordered_map<InputAction, InputResponse, fri::util::FNVHash<InputAction>> _continuous_actions;
           std::list<InputEvent> _input_queue;
+          std::set<SDL_Keycode> _active_inputs;
           // Todo: replace with std::function
           fri::util::ChainTree<InputAction, InputResponse, INPUT_END, nullptr> _action_tree;
-
-          void MapInput(char * Out) const;
         public:
           InputSystem();
           ~InputSystem();
 
           virtual void Tick(fri::system::GameContext & Context, double Step);
 
-          void EnqueueInputEvent(fri::system::GameContext & Context, SDL_Keycode K);
+          void InputActivate(fri::system::GameContext & Context, SDL_Keycode K);
+          void InputDeactivate(fri::system::GameContext & Context, SDL_Keycode K);
 
           void SetInputMapping(SDL_Keycode K, InputAction Action);
 
-          void RegisterInputAction(const InputAction * Descriptor, InputResponse Response);
+          void RegisterInputEdgeTrigger(const InputAction * Descriptor, InputResponse Response);
+          void RegisterInputContinuousTrigger(const InputAction Action, InputResponse Response);
       };
     }
   }

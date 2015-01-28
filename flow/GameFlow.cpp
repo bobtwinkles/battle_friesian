@@ -9,6 +9,8 @@
 
 using fri::flow::GameFlow;
 using fri::flow::IFlow;
+using fri::system::GameContext;
+using fri::system::input::InputAction;
 
 GameFlow::GameFlow() {
   _debug_draw = std::make_shared<fri::system::render::Box2DDebug>();
@@ -22,10 +24,28 @@ GameFlow::GameFlow() {
   world.SetDebugDraw(&(*_debug_draw));
   _debug_draw_index = _ctx.GetRenderSystem().RegisterRenderable(_debug_draw);
 
+  // TODO:
+  // ------------------- BEGIN INITIALIZATION HACK --------------------------------
   auto h1 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 4, 1);
   _ctx.GetEntitySystem().RegisterGameObject(h1);
   auto h2 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 6, 1);
   _ctx.GetEntitySystem().RegisterGameObject(h2);
+
+  fri::system::input::InputSystem & input = _ctx.GetInputSystem();
+
+  input.SetInputMapping(SDLK_SPACE, InputAction::INPUT_JUMP);
+  input.SetInputMapping(119       , InputAction::INPUT_UP);
+  input.SetInputMapping(97        , InputAction::INPUT_LEFT);
+  input.SetInputMapping(115       , InputAction::INPUT_DOWN);
+  input.SetInputMapping(100       , InputAction::INPUT_RIGHT);
+
+  input.RegisterInputContinuousTrigger(
+      InputAction::INPUT_JUMP,
+      [h1] (GameContext & Context, const InputAction * Action) {
+          std::cout << "science! " << std::endl;
+        }
+      );
+  //--------------------- END  INITIALIZATION HACK --------------------------------
 
   std::string fname = fri::GetBaseDirectory();
   fname.append("resources/levels/level0.txt");
@@ -49,4 +69,19 @@ bool GameFlow::ShouldSwitch() {
 
 IFlow * GameFlow::NextFlow() {
   return nullptr;
+}
+
+void GameFlow::HandleEvent(SDL_Event & Event) {
+  switch(Event.type) {
+    case SDL_KEYDOWN:
+      if (!Event.key.repeat) {
+        _ctx.GetInputSystem().InputActivate(_ctx, Event.key.keysym.sym);
+      }
+      break;
+    case SDL_KEYUP:
+      if (!Event.key.repeat) {
+        _ctx.GetInputSystem().InputDeactivate(_ctx, Event.key.keysym.sym);
+      }
+      break;
+  }
 }

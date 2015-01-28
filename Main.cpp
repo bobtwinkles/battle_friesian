@@ -108,6 +108,7 @@ int main(int argc, char *argv[]) {
           }
           break;
       }
+      gameflow->HandleEvent(event);
     }
 
     gameflow->Tick(1.0 / 60.0);

@@ -22,6 +22,8 @@ namespace fri {
 
         virtual bool ShouldSwitch();
         virtual IFlow * NextFlow();
+
+        virtual void HandleEvent(SDL_Event & Event);
     };
   }
 }

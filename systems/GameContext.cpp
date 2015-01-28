@@ -6,6 +6,7 @@ using fri::system::render::RenderSystem;
 
 void GameContext::Tick(double Step) {
   _current_time += Step;
+  _input.Tick(*this, Step);
   _animation.Tick(*this, Step);
   _render.Tick(*this, Step);
   _entity.Tick(*this, Step);
