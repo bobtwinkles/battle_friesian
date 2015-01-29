@@ -11,6 +11,13 @@ using fri::flow::GameFlow;
 using fri::flow::IFlow;
 using fri::system::GameContext;
 using fri::system::input::InputAction;
+using fri::system::input::InputResponse;
+
+namespace {
+  void JumpHorse(GameContext & Context, const InputAction * Action, std::shared_ptr<fri::system::entity::entities::EasyHorse> H) {
+
+  }
+}
 
 GameFlow::GameFlow() {
   _debug_draw = std::make_shared<fri::system::render::Box2DDebug>();
@@ -39,12 +46,8 @@ GameFlow::GameFlow() {
   input.SetInputMapping(115       , InputAction::INPUT_DOWN);
   input.SetInputMapping(100       , InputAction::INPUT_RIGHT);
 
-  input.RegisterInputContinuousTrigger(
-      InputAction::INPUT_JUMP,
-      [h1] (GameContext & Context, const InputAction * Action) {
-          std::cout << "science! " << std::endl;
-        }
-      );
+  input.RegisterInputContinuousTrigger(InputAction::INPUT_JUMP,
+      std::bind(JumpHorse, std::placeholders::_1, std::placeholders::_2, h1));
   //--------------------- END  INITIALIZATION HACK --------------------------------
 
   std::string fname = fri::GetBaseDirectory();

@@ -106,7 +106,7 @@ namespace fri {
           E_AMBIGUOUS_KEY,
         };
 
-        std::pair<ChainTreeNode<KeyType, ValueType> *, InsertFailure> Insert(const KeyType * KeyChain, int KeyChainLength, ValueType & Value) {
+        std::pair<ChainTreeNode<KeyType, ValueType> *, InsertFailure> Insert(const KeyType * KeyChain, int KeyChainLength, const ValueType & Value) {
           ChainTreeNode<KeyType, ValueType> * current = &_root;
           ChainTreeNode<KeyType, ValueType> * next;
           int depth = 0;

@@ -28,7 +28,7 @@ namespace fri {
       };
 
       //typedef void (*InputResponse) (fri::system::GameContext & Context, const InputAction * Action);
-      typedef std::function<void(fri::system::GameContext & Context, const InputAction * Action)>* InputResponse;
+      typedef std::function<void(fri::system::GameContext & Context, const InputAction * Action)> InputResponse;
 
       struct InputEvent {
         double input_frame;
@@ -44,8 +44,8 @@ namespace fri {
           std::unordered_map<InputAction, InputResponse, fri::util::FNVHash<InputAction>> _continuous_actions;
           std::list<InputEvent> _input_queue;
           std::set<SDL_Keycode> _active_inputs;
-          // Todo: replace with std::function
-          fri::util::ChainTree<InputAction, InputResponse, INPUT_END, nullptr> _action_tree;
+          typedef fri::util::ChainTree<InputAction, const InputResponse *, INPUT_END, nullptr> ActionTree;
+          ActionTree _action_tree;
         public:
           InputSystem();
           ~InputSystem();

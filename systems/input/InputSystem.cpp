@@ -12,21 +12,25 @@ using fri::system::input::InputResponse;
 using fri::system::input::InputSystem;
 
 namespace {
+  void PrintInputAction(InputAction Action) {
+    switch(Action) {
+      case InputAction::INPUT_END   : std::cout << "INPUT_END   "; break;
+      case InputAction::INPUT_UP    : std::cout << "INPUT_UP    "; break;
+      case InputAction::INPUT_DOWN  : std::cout << "INPUT_DOWN  "; break;
+      case InputAction::INPUT_LEFT  : std::cout << "INPUT_LEFT  "; break;
+      case InputAction::INPUT_RIGHT : std::cout << "INPUT_RIGHT "; break;
+      case InputAction::INPUT_JUMP  : std::cout << "INPUT_JUMP  "; break;
+      default: std::cout << "UNKNOWN " << Action; break;
+    }
+  }
+
   void PrintInputQueue(std::list<InputEvent> & Queue, std::unordered_map<SDL_Keycode, InputAction> & Mapping) {
     for (auto i : Queue) {
       auto m = Mapping.find(i.key);
       if (m == Mapping.end()) {
         std::cout << i.key << " ";
       } else {
-        switch(m->second) {
-          case InputAction::INPUT_END   : std::cout << "INPUT_END   "; break;
-          case InputAction::INPUT_UP    : std::cout << "INPUT_UP    "; break;
-          case InputAction::INPUT_DOWN  : std::cout << "INPUT_DOWN  "; break;
-          case InputAction::INPUT_LEFT  : std::cout << "INPUT_LEFT  "; break;
-          case InputAction::INPUT_RIGHT : std::cout << "INPUT_RIGHT "; break;
-          case InputAction::INPUT_JUMP  : std::cout << "INPUT_JUMP  "; break;
-          default: std::cout << "UNKNOWN " << m->second; break;
-        }
+        PrintInputAction(m->second);
       }
     }
     if (Queue.size() > 0) {
@@ -63,12 +67,12 @@ void InputSystem::Tick(GameContext & Context, double Step) {
     }
 
     // Pattern match input
-    std::pair<ChainTreeNode<InputAction, InputResponse> *, int> action = std::make_pair(nullptr, 0);
+    std::pair<ChainTreeNode<InputAction, const InputResponse *> *, int> action = std::make_pair(nullptr, 0);
     int num_drop = 0;
     do {
       action = _action_tree.FirstMatch(queue + num_drop, queue_length - num_drop);
       if (action.first) {
-        action.first->GetValue()(Context, queue + num_drop);
+        (*action.first->GetValue())(Context, queue + num_drop);
         num_drop += action.second;
       }
     } while (action.first);
@@ -98,12 +102,22 @@ void InputSystem::InputDeactivate(GameContext & Context, SDL_Keycode K) {
   _active_inputs.erase(K);
 }
 
-void InputSystem::RegisterInputEdgeTrigger(const InputAction * Descriptor, InputResponse Response) {
+void InputSystem::RegisterInputEdgeTrigger(const InputAction * Descriptor, const InputResponse Response) {
   int len = strlen((const char *)Descriptor);
-  _action_tree.Insert(Descriptor, len, Response);
+  auto a = _action_tree.Insert(Descriptor, len, &Response);
+  switch (a.second) {
+    case ActionTree::InsertFailure::E_AMBIGUOUS_KEY:
+      while (*Descriptor != INPUT_END) {
+        PrintInputAction(*Descriptor);
+      }
+      std::cout << std::endl;
+      abort();
+    case ActionTree::InsertFailure::E_SUCCESS:
+      break;
+  }
 }
 
-void InputSystem::RegisterInputContinuousTrigger(const InputAction Action, InputResponse Response) {
+void InputSystem::RegisterInputContinuousTrigger(const InputAction Action, const InputResponse Response) {
   _continuous_actions.insert(std::make_pair(Action, Response));
 }
 
