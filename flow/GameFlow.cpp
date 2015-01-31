@@ -15,7 +15,7 @@ using fri::system::input::InputResponse;
 
 namespace {
   void JumpHorse(GameContext & Context, const InputAction * Action, std::shared_ptr<fri::system::entity::entities::EasyHorse> H) {
-
+    H->Jump(Context);
   }
 }
 

@@ -3,6 +3,7 @@
 #include "systems/render/renderables/Box2DDebug.hpp"
 
 using fri::system::GameContext;
+using fri::system::physics::PhysicsObject;
 using fri::system::physics::PhysicsSystem;
 
 PhysicsSystem::PhysicsSystem() : _world(b2Vec2(0, -9.81)) {

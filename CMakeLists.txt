@@ -30,19 +30,23 @@ set(SRC Main.cpp
         systems/entity/entities/EasyHorse.cpp
         systems/entity/entities/Platform.cpp
         systems/input/InputSystem.cpp
+        systems/physics/Fixture.cpp
+        systems/physics/PhysicsObject.cpp
         systems/physics/PhysicsSystem.cpp
         systems/render/RenderSystem.cpp
         systems/render/renderables/MobileTexturedRender.cpp
         systems/render/renderables/Box2DDebug.cpp
         metric/GPUMetric.cpp
-        util/Util.cpp
         util/ImageLoad.cpp
+        util/Util.cpp
+        util/rtti/RTTIBase.cpp
         ogl/Shader.cpp
         ogl/Texture.cpp
         ogl/TexturedVertexBuffer.cpp
         ogl/ui/UI.cpp
         ogl/ui/Graph.cpp
-        ogl/ui/Text.cpp)
+        ogl/ui/Text.cpp
+        )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
