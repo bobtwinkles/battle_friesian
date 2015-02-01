@@ -26,7 +26,10 @@ namespace fri {
 
             float _temp;
           public:
-            // X and Y are specified in physics coordinates
+            /**
+             * @param X X in gfx coordinates
+             * @param Y Y in gfx coordinates
+             */
             EasyHorse(fri::system::GameContext & Context, float X, float Y);
             ~EasyHorse();
 

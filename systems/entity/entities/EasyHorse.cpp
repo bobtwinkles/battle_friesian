@@ -62,6 +62,8 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   b2World & world = Context.GetPhysicsSystem().GetWorld();
   float phys_w = _animations[0].GetCurrent()->GetWidth() * PHYS_SCALE / IMG_SCALE
       , phys_h = _animations[0].GetCurrent()->GetHeight() * PHYS_SCALE / IMG_SCALE;
+  X *= PHYS_SCALE / GFX_SCALE;
+  Y *= PHYS_SCALE / GFX_SCALE;
 
   _object = new EasyHorseBody(world, X, Y);
   _object->AttachFixture(new EasyHorseFixture(_object, phys_w, phys_h));

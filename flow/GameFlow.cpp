@@ -33,9 +33,9 @@ GameFlow::GameFlow() {
 
   // TODO:
   // ------------------- BEGIN INITIALIZATION HACK --------------------------------
-  auto h1 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 4, 1);
+  auto h1 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 0.4, 0.1);
   _ctx.GetEntitySystem().RegisterGameObject(h1);
-  auto h2 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 6, 1);
+  auto h2 = std::make_shared<fri::system::entity::entities::EasyHorse>(_ctx, 0.6, 0.1);
   _ctx.GetEntitySystem().RegisterGameObject(h2);
 
   fri::system::input::InputSystem & input = _ctx.GetInputSystem();
