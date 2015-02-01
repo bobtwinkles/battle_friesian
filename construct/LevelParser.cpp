@@ -35,7 +35,7 @@ namespace {
       float x, y, w, h;
       char file_path[1024];
       int parse = sscanf(Line, "PLATFORM %f %f %f %f %1023s", &x, &y, &w, &h, file_path);
-      if (parse < 5) {
+      if (parse != 5) {
         return ParseError(0, 0, "Platform must have \"x y w h image\" image can be NOIMG to indicate that this wall is invisible");
       }
       std::cout << "  Adding platform" << std::endl;

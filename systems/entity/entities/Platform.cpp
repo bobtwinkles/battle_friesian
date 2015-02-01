@@ -61,7 +61,7 @@ PlatformBody::PlatformBody(b2World & World, Platform * Plat) : PhysicsObject( { 
 
   b2BodyDef def;
   def.type = b2_staticBody;
-  def.position.Set((w / 2) + x * PHYS_SCALE / GFX_SCALE, (h / 2) + y * PHYS_SCALE / GFX_SCALE);
+  def.position.Set((w / 2) + x, (h / 2) + y);
   def.userData = this->GetStub();
   _body = World.CreateBody(&def);
 }
@@ -88,20 +88,20 @@ PlatformFixture::PlatformFixture(PlatformBody * Parent, PlatformSide Side) : Fix
     case PlatformSide::TOP:
       x = 0;
       y = (ph - h) / 2;
-      box.SetAsBox(pw, h, b2Vec2(x, y), 0);
+      box.SetAsBox(pw / 2, h, b2Vec2(x, y), 0);
       break;
     case PlatformSide::BOTTOM:
       x = 0;
       y = (-ph + h) / 2;
-      box.SetAsBox(pw, h, b2Vec2(x, y), 0);
+      box.SetAsBox(pw / 2, h, b2Vec2(x, y), 0);
       break;
     case PlatformSide::LEFT:
-      x = -pw + w;
+      x = -pw / 2 + w;
       y = 0;
       box.SetAsBox(w, ph / 2 - h, b2Vec2(x, y), 0);
       break;
     case PlatformSide::RIGHT:
-      x = pw - w;
+      x = pw / 2 - w;
       y = 0;
       box.SetAsBox(w, ph / 2 - h, b2Vec2(x, y), 0);
       break;
