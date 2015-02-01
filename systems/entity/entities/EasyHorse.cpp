@@ -5,17 +5,21 @@
 #include "systems/physics/Fixture.hpp"
 #include "systems/physics/PhysicsObject.hpp"
 
+#include "systems/entity/entities/Platform.hpp"
+
 using fri::system::GameContext;
 using fri::system::Registry;
 using fri::system::AnimationRegistry;
 using fri::system::animation::Animation;
 using fri::system::animation::AnimationIndex;
 using fri::system::entity::entities::EasyHorse;
+using fri::system::entity::entities::platform::PlatformFixture;
+using fri::system::entity::entities::platform::PlatformSide;
 using fri::system::physics::BoxFixture;
 using fri::system::physics::PhysicsObject;
 using fri::system::physics::PhysicsSystem;
 using fri::system::render::MobileTexturedRenderer;
-using fri::util::rtti::TypeID;
+using namespace fri::util::rtti;
 
 namespace {
   /**
@@ -72,7 +76,7 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
   _renderable_index = Context.GetRenderSystem().RegisterRenderable(_renderer);
   _renderer->SetPosition(X * GFX_SCALE / PHYS_SCALE, Y * GFX_SCALE / PHYS_SCALE);
 
-  _temp = 1;
+  _on_ground = true;
 }
 
 EasyHorse::~EasyHorse() {
@@ -89,8 +93,30 @@ void EasyHorse::Tick(GameContext & Context, double Step) {
 
   // Make sure the renderer has an up-to-date texture
   _renderer->SetTexture(t);
+
+  // assume we have left the ground, but search the contact list for a platform
+  // top to verify this claim.
+  _on_ground = false;
+  b2ContactEdge * contact = _object->GetParent()->GetContactList();
+  while (contact) {
+    RTTIStub * data = (RTTIStub*) contact->contact->GetFixtureB()->GetUserData();
+    PlatformFixture * pf = GetBaseAs<PlatformFixture>(data);
+    if (pf) {
+      if (pf->GetSide() == PlatformSide::TOP) {
+        _on_ground = true;
+      }
+    }
+    contact = contact->next;
+  }
 }
 
 void EasyHorse::Jump(GameContext & Context) {
-  b2World & world = Context.GetPhysicsSystem().GetWorld();
+  if (_on_ground) {
+    b2World & world = Context.GetPhysicsSystem().GetWorld();
+    b2Body * body = _object->GetParent();
+    b2MassData data;
+    body->GetMassData(&data);
+
+    body->ApplyForce(b2Vec2(0, data.mass * 50), data.center, true);
+  }
 }

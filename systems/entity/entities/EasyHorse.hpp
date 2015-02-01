@@ -24,7 +24,7 @@ namespace fri {
             fri::system::animation::Animation * _animations;
             fri::system::physics::PhysicsObject * _object;
 
-            float _temp;
+            bool _on_ground;
           public:
             /**
              * @param X X in gfx coordinates
