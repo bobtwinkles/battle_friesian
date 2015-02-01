@@ -14,8 +14,8 @@ using fri::system::entity::entities::platform::PlatformFixture;
 using fri::system::entity::entities::platform::PlatformSide;
 using fri::system::render::MobileTexturedRenderer;
 
-TypeID PlatformBody::_type = NextTypeID();
-TypeID PlatformFixture::_type = NextTypeID();
+TypeID PlatformBody::_type = NextTypeID("PlatformBody");
+TypeID PlatformFixture::_type = NextTypeID("PlatformFixture");
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////// Main Platform members ///////////////////////////////

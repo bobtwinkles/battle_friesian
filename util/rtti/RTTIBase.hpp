@@ -55,7 +55,8 @@ namespace fri {
           inline RTTIStub * GetStub() { return &_stub; }
       };
 
-      int NextTypeID();
+      TypeID NextTypeID(const char * ClassName);
+      const char * ClassnameForTypeID(TypeID ID);
     }
   }
 }

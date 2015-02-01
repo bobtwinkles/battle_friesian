@@ -47,8 +47,8 @@ namespace {
       }
   };
 
-  fri::util::rtti::TypeID EasyHorseBody::_type = fri::util::rtti::NextTypeID();
-  fri::util::rtti::TypeID EasyHorseFixture::_type = fri::util::rtti::NextTypeID();
+  TypeID EasyHorseBody::_type = fri::util::rtti::NextTypeID("EasyHorseBody");
+  TypeID EasyHorseFixture::_type = fri::util::rtti::NextTypeID("EasyHorseFixture");
 }
 
 EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
