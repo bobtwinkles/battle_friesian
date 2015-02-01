@@ -38,6 +38,40 @@ namespace fri {
           inline TypeID GetType() const { return _base_info.type; }
       };
 
+      /**
+       * Replace `dynamic_cast`.
+       *
+       * @todo support casting up a type hierarchy
+       */
+      template<typename T>
+      T * GetBaseAs(RTTIStub * Stub) {
+        if (Stub->GetType() == T::_type) {
+          return (T*) Stub->GetBase();
+        } else {
+          return nullptr;
+        }
+      }
+
+      /**
+       * Passes through a nullptr if `Stub` is null.
+       *
+       * @see GetBaseAs()
+       */
+      template<typename T>
+      T * GetBaseAsNull(RTTIStub * Stub) {
+        if (!Stub) {
+          return nullptr;
+        } else {
+          return GetBaseAs<T>(Stub);
+        }
+      }
+
+      /**
+       * Base class of all things which intend to provide RTTI data.
+       * Every subclass _must_ export a member of the form
+       * `public static TypeID _type` in order to allow the casting functions
+       *  to work properly.
+       */
       class RTTIBase {
         private:
           RTTIStub _stub;

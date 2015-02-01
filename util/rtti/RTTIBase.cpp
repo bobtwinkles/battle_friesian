@@ -26,7 +26,7 @@ TypeID fri::util::rtti::NextTypeID(const char * Name) {
   return current_typeid;
 }
 
-const char * ClassnameForTypeID(TypeID ID) {
+const char * fri::util::rtti::ClassnameForTypeID(TypeID ID) {
   auto it = GetClassnameMap().find(ID);
 
   if (it != GetClassnameMap().end()) {
