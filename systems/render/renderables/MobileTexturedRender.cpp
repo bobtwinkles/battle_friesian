@@ -6,6 +6,7 @@
 #include "systems/render/RenderSystem.hpp"
 
 using fri::ogl::Texture;
+using fri::ogl::TexturedVertex;
 using fri::ogl::TexturedVertexBuffer;
 using fri::system::render::MobileTexturedRenderer;
 
@@ -15,6 +16,15 @@ MobileTexturedRenderer::MobileTexturedRenderer(std::shared_ptr<ogl::Texture> Tex
   _needs_update = true;
   _x = 0;
   _y = 0;
+
+  float w = _tex->GetWidth() * GFX_SCALE / IMG_SCALE;
+  float h = _tex->GetHeight() * GFX_SCALE / IMG_SCALE;
+
+  float min_x = _x - w / 2;
+  float min_y = _y;
+
+  fri::ogl::QueueTexturedRectangle(_buffer, glm::vec2(min_x, min_y), glm::vec2(min_x + w, min_y + h),
+                                            glm::vec2(0, 0), glm::vec2(1, 1));
 }
 
 MobileTexturedRenderer::~MobileTexturedRenderer() {
@@ -35,10 +45,19 @@ void MobileTexturedRenderer::Update() {
   float min_x = _x - w / 2;
   float min_y = _y;
 
-  //TODO: Make a fast path for modifying this data in-place<Plug>delimitMateCR
-  _buffer.ClearVertexData();
-  fri::ogl::QueueTexturedRectangle(_buffer, glm::vec2(min_x, min_y), glm::vec2(min_x + w, min_y + h),
-                                            glm::vec2(0, 0), glm::vec2(1, 1));
+  std::vector<TexturedVertex> & data = _buffer.GetVertices();
+
+  data[0].x = min_x;
+  data[0].y = min_y;
+
+  data[1].x = min_x;
+  data[1].y = min_y + h;
+
+  data[2].x = min_x + w;
+  data[2].y = min_y;
+
+  data[3].x = min_x + w;
+  data[3].y = min_y + h;
 
   _buffer.Sync();
 
