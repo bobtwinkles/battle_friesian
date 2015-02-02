@@ -81,6 +81,7 @@ EasyHorse::EasyHorse(GameContext & Context, float X, float Y) {
 
 EasyHorse::~EasyHorse() {
   delete[] _animations;
+  delete _object;
 }
 
 void EasyHorse::Tick(GameContext & Context, double Step) {
