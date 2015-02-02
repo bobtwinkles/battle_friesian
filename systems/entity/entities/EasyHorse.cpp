@@ -116,8 +116,9 @@ void EasyHorse::Jump(GameContext & Context) {
     b2World & world = Context.GetPhysicsSystem().GetWorld();
     b2Body * body = _object->GetParent();
     b2MassData data;
-    body->GetMassData(&data);
+    const b2Vec2 vel = body->GetLinearVelocity();
 
-    body->ApplyForce(b2Vec2(0, data.mass * 50), data.center, true);
+    body->GetMassData(&data);
+    body->SetLinearVelocity(b2Vec2(vel.x, 6 * data.mass));
   }
 }
