@@ -1,0 +1,8 @@
+{
+  static-typeid
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  fun:_ZN3fri4util4rtti10NextTypeIDEPKc
+  ...
+}

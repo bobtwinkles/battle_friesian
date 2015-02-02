@@ -83,6 +83,7 @@ PlatformFixture::PlatformFixture(PlatformBody * Parent, PlatformSide Side) : Fix
 
   float x, y;
   b2PolygonShape box;
+  _side = Side;
 
   switch (Side) {
     case PlatformSide::TOP:
