@@ -19,6 +19,7 @@ using fri::system::physics::BoxFixture;
 using fri::system::physics::PhysicsObject;
 using fri::system::physics::PhysicsSystem;
 using fri::system::render::MobileTexturedRenderer;
+using fri::ogl::texture::Texture;
 using namespace fri::util::rtti;
 
 namespace {
@@ -88,7 +89,7 @@ void EasyHorse::Tick(GameContext & Context, double Step) {
   // Sync position between rendering and physics systems
   b2World & world = Context.GetPhysicsSystem().GetWorld();
   b2Vec2 vec = _object->GetParent()->GetPosition();
-  std::shared_ptr<fri::ogl::Texture> t = (*_current_animation_index)->GetCurrent();
+  std::shared_ptr<Texture> t = (*_current_animation_index)->GetCurrent();
   _renderer->SetPosition(vec.x * GFX_SCALE / PHYS_SCALE,
                          vec.y * GFX_SCALE / PHYS_SCALE - (t->GetHeight() * GFX_SCALE / IMG_SCALE / 2));
 

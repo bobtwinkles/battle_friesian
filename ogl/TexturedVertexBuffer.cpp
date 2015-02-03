@@ -6,6 +6,7 @@
 
 using fri::ogl::TexturedVertex;
 using fri::ogl::TexturedVertexBuffer;
+using fri::ogl::texture::Texture;
 
 TexturedVertexBuffer::TexturedVertexBuffer(GLenum Mode, GLenum Usage, std::shared_ptr<Texture> Texture) :
   _texture(Texture) {
@@ -73,7 +74,7 @@ void TexturedVertexBuffer::Sync() {
   _verts_ok = true;
 }
 
-void TexturedVertexBuffer::Render(const fri::ogl::Environment & Env) const {
+void TexturedVertexBuffer::Render(fri::ogl::Environment & Env) const {
   assert(_verts_ok);
   glBindVertexArray(_vao);
   glBindBuffer(GL_ARRAY_BUFFER, _data_buffer);
@@ -83,7 +84,7 @@ void TexturedVertexBuffer::Render(const fri::ogl::Environment & Env) const {
   fri::ogl::ShaderProgram * cs = Env.GetCurrentShaderProgram();
 
   glActiveTexture(GL_TEXTURE0);
-  _texture->Bind();
+  _texture->Bind(Env);
   cs->Upload(NAME_TEXTURE, 0); // we want to use texture 0
 
   glEnableVertexAttribArray(LOC_COORDINATE);

@@ -42,7 +42,7 @@ namespace {
       std::cout << "    Position  " << x << ", " << y << std::endl;
       std::cout << "    Size " << w << "x" << h << std::endl;
       std::cout << "    Image " << file_path << std::endl;
-      std::shared_ptr<fri::ogl::Texture> tex = nullptr;
+      std::shared_ptr<fri::ogl::texture::Texture> tex = nullptr;
       if (strcmp(file_path, "NOIMG")) {
         tex = fri::LoadImage(file_path);
       }

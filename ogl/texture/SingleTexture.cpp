@@ -1,20 +1,20 @@
-#include "ogl/Texture.hpp"
+#include "ogl/texture/SingleTexture.hpp"
 
-using fri::ogl::Texture;
+using fri::ogl::texture::SingleTexture;
 
-Texture::Texture() {
+SingleTexture::SingleTexture() {
   glGenTextures(1, &_texture);
 
   _width = 0;
   _height = 0;
 }
 
-Texture::~Texture() {
+SingleTexture::~SingleTexture() {
   glDeleteTextures(1, &_texture);
 }
 
-void Texture::SetTextureData(GLsizei Width, GLsizei Height, GLenum Format,
-                             GLenum Type, GLvoid * Data) {
+void SingleTexture::SetTextureData(GLsizei Width, GLsizei Height, GLenum Format,
+                                   GLenum Type, GLvoid * Data) {
   _width = Width;
   _height = Height;
   glBindTexture(GL_TEXTURE_2D, _texture);

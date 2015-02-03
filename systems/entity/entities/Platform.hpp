@@ -79,7 +79,7 @@ namespace fri {
             platform::PlatformBody * _object;
             float _x, _y, _width, _height;
           public:
-            Platform(fri::system::GameContext & Context, float X, float Y, float W, float H, std::shared_ptr<fri::ogl::Texture> Tex);
+            Platform(fri::system::GameContext & Context, float X, float Y, float W, float H, std::shared_ptr<fri::ogl::texture::Texture> Tex);
             ~Platform();
 
             inline float GetX() const { return _x; }

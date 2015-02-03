@@ -7,10 +7,12 @@
 
 namespace fri {
   namespace ogl {
-    class Texture;
+    namespace texture {
+      class Texture;
+    }
   }
   // The pointer returned through OutData ** must be freed with delete[]
-  std::shared_ptr<fri::ogl::Texture> LoadImage(const char * FName);
+  std::shared_ptr<fri::ogl::texture::Texture> LoadImage(const char * FName);
 }
 
 #endif

@@ -37,7 +37,7 @@ namespace fri {
 
           virtual void Tick (fri::system::GameContext & Context, double Step);
 
-          void SetBackgroundTexture(std::shared_ptr<fri::ogl::Texture>);
+          void SetBackgroundTexture(std::shared_ptr<fri::ogl::texture::Texture>);
       };
     }
   }

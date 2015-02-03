@@ -5,12 +5,12 @@
 #include "systems/Scales.hpp"
 #include "systems/render/RenderSystem.hpp"
 
-using fri::ogl::Texture;
 using fri::ogl::TexturedVertex;
 using fri::ogl::TexturedVertexBuffer;
+using fri::ogl::texture::Texture;
 using fri::system::render::MobileTexturedRenderer;
 
-MobileTexturedRenderer::MobileTexturedRenderer(std::shared_ptr<ogl::Texture> Tex) :
+MobileTexturedRenderer::MobileTexturedRenderer(std::shared_ptr<Texture> Tex) :
   _buffer(GL_TRIANGLE_STRIP, GL_STATIC_DRAW, Tex) {
   _tex = Tex;
   _needs_update = true;

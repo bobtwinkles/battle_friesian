@@ -1,14 +1,16 @@
 #include "ImageLoad.hpp"
 
 #include "util/Util.hpp"
-#include "ogl/Texture.hpp"
+#include "ogl/texture/Texture.hpp"
+#include "ogl/texture/SingleTexture.hpp"
 
 #include <SDL2/SDL_image.h>
 
 #include <string>
 
 using std::shared_ptr;
-using fri::ogl::Texture;
+using fri::ogl::texture::Texture;
+using fri::ogl::texture::SingleTexture;
 
 shared_ptr<Texture> fri::LoadImage(const char * FName) {
   SDL_Surface * surface;
@@ -16,7 +18,7 @@ shared_ptr<Texture> fri::LoadImage(const char * FName) {
   name.append(FName);
   surface = IMG_Load(name.c_str());
 
-  auto ret = shared_ptr<Texture>(new Texture());
+  SingleTexture * ret = new SingleTexture();
 
   if (!surface) {
     std::cerr << "Failed to load image " << FName << " from " << name << std::endl;
@@ -31,7 +33,7 @@ shared_ptr<Texture> fri::LoadImage(const char * FName) {
       }
     }
     ret->SetTextureData(256, 256, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    return ret;
+    return std::shared_ptr<Texture>(ret);
   } else {
     SDL_Surface * rgba = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
 
@@ -58,6 +60,6 @@ shared_ptr<Texture> fri::LoadImage(const char * FName) {
 
     delete[] buffer;
 
-    return ret;
+    return std::shared_ptr<Texture>(ret);
   }
 }

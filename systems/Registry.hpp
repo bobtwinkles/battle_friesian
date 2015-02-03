@@ -10,7 +10,9 @@
 
 namespace fri {
   namespace ogl {
-    class Texture;
+    namespace texture {
+      class Texture;
+    }
   }
 
   namespace system {
@@ -28,7 +30,7 @@ namespace fri {
       };
 
       struct TextureAllocator {
-        std::shared_ptr<fri::ogl::Texture> operator() (const char * Name) const;
+        std::shared_ptr<fri::ogl::texture::Texture> operator() (const char * Name) const;
       };
     }
 
@@ -37,7 +39,7 @@ namespace fri {
     template<typename T, typename TCreator=_registry_allocators::DefaultAllocator<T>>
     class Registry {
       private:
-        std::unordered_map<const char *, T, fri::util::StringHash> _storage;
+        std::unordered_map<const char *, const T, fri::util::StringHash> _storage;
         TCreator _constructor;
 
         DISALLOW_COPY_AND_ASSIGN(Registry);
@@ -47,7 +49,7 @@ namespace fri {
         ~Registry() {
         }
 
-        void Register(const char * Key, T & Value) {
+        void Register(const char * Key, const T & Value) {
           _storage.insert(std::make_pair(Key, Value));
         }
 
@@ -61,7 +63,7 @@ namespace fri {
     };
 
     typedef Registry<animation::Animation> AnimationRegistry;
-    typedef Registry<std::shared_ptr<fri::ogl::Texture>, _registry_allocators::TextureAllocator> TextureRegistry;
+    typedef Registry<std::shared_ptr<fri::ogl::texture::Texture>, _registry_allocators::TextureAllocator> TextureRegistry;
 
     AnimationRegistry & GetAnimationRegistry();
     TextureRegistry & GetTextureRegistry();

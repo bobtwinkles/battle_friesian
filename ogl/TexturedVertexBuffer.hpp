@@ -10,7 +10,7 @@
 #include "util/Util.hpp"
 
 #include "ogl/Environment.hpp"
-#include "ogl/Texture.hpp"
+#include "ogl/texture/Texture.hpp"
 
 namespace fri {
   namespace ogl {
@@ -27,7 +27,7 @@ namespace fri {
         GLenum _usage;
         GLenum _mode;
 
-        std::shared_ptr<Texture> _texture;
+        std::shared_ptr<texture::Texture> _texture;
 
         std::vector<TexturedVertex> _vertices;
         std::vector<GLuint> _indicies;
@@ -38,14 +38,14 @@ namespace fri {
 
         DISALLOW_COPY_AND_ASSIGN(TexturedVertexBuffer);
       public:
-        TexturedVertexBuffer(GLenum Mode, GLenum Usage, std::shared_ptr<Texture> Texture);
+        TexturedVertexBuffer(GLenum Mode, GLenum Usage, std::shared_ptr<texture::Texture> Texture);
         ~TexturedVertexBuffer();
 
         void AddVertex(TexturedVertex Vertex);
         void AddVerticies(std::vector<TexturedVertex> Verts, std::vector<GLuint> Inidicies);
         void ClearVertexData();
 
-        void SetTexture(std::shared_ptr<Texture> Tex) { _texture = Tex; }
+        void SetTexture(std::shared_ptr<texture::Texture> Tex) { _texture = Tex; }
 
         ///WARNING: If these methods are used to modify the verticies, this class will no longer be
         /// capable of ensuring the gpu-side structure is in sync
@@ -54,7 +54,7 @@ namespace fri {
 
         void Sync();
 
-        void Render(const fri::ogl::Environment & Env) const;
+        void Render(fri::ogl::Environment & Env) const;
     };
 
     void QueueTexturedRectangle(TexturedVertexBuffer & Buffer, glm::vec2 PStart, glm::vec2 PEnd

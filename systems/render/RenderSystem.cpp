@@ -10,7 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-using fri::ogl::Texture;
+using fri::ogl::texture::Texture;
 using fri::system::render::RenderableIndex;
 using fri::system::render::RenderSystem;
 using fri::system::render::IRenderable;

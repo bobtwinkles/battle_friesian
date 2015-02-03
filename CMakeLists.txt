@@ -41,8 +41,9 @@ set(SRC Main.cpp
         util/Util.cpp
         util/rtti/RTTIBase.cpp
         ogl/Shader.cpp
-        ogl/Texture.cpp
         ogl/TexturedVertexBuffer.cpp
+        ogl/texture/Texture.cpp
+        ogl/texture/SingleTexture.cpp
         ogl/ui/UI.cpp
         ogl/ui/Graph.cpp
         ogl/ui/Text.cpp

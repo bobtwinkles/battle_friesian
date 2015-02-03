@@ -6,6 +6,7 @@
 
 #include "systems/Registry.hpp"
 
+using fri::ogl::texture::Texture;
 using fri::system::TextureRegistry;
 using fri::system::animation::Animation;
 
@@ -15,7 +16,7 @@ Animation::Animation(const char * FName) {
   name.append(FName);
   std::ifstream in(name);
   in >> _num_frames;
-  _frames = new std::shared_ptr<fri::ogl::Texture>[_num_frames];
+  _frames = new std::shared_ptr<Texture>[_num_frames];
   _frametimes = new int[_num_frames];
 
   TextureRegistry & reg = fri::system::GetTextureRegistry();
@@ -42,7 +43,7 @@ Animation::Animation(const Animation & Other) {
   _num_frames             = Other._num_frames;
   _current_frame          = Other._current_frame;
   _current_internal_frame = Other._current_internal_frame;
-  _frames                 = new std::shared_ptr<fri::ogl::Texture>[_num_frames];
+  _frames                 = new std::shared_ptr<Texture>[_num_frames];
   _frametimes             = new int[_num_frames];
   for (int i = 0; i < _num_frames; ++i) {
     _frames[i] = Other._frames[i];

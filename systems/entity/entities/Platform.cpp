@@ -4,7 +4,7 @@
 #include "systems/Scales.hpp"
 #include "systems/physics/Fixture.hpp"
 
-using fri::ogl::Texture;
+using fri::ogl::texture::Texture;
 using fri::util::rtti::TypeID;
 using fri::util::rtti::NextTypeID;
 using fri::system::GameContext;

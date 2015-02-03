@@ -3,14 +3,14 @@
 
 #include <memory>
 
-#include "ogl/Texture.hpp"
+#include "ogl/texture/Texture.hpp"
 
 namespace fri {
   namespace system {
     namespace animation {
       class Animation {
         private:
-          std::shared_ptr<fri::ogl::Texture> * _frames;
+          std::shared_ptr<fri::ogl::texture::Texture> * _frames;
           int * _frametimes;
           int _num_frames;
           int _current_frame;
@@ -32,7 +32,7 @@ namespace fri {
           // Choose random current frame;
           void Randomize();
 
-          std::shared_ptr<fri::ogl::Texture> GetCurrent() const { return _frames[_current_frame]; }
+          std::shared_ptr<fri::ogl::texture::Texture> GetCurrent() const { return _frames[_current_frame]; }
       };
     }
   }
