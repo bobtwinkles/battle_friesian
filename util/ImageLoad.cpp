@@ -33,6 +33,9 @@ shared_ptr<Texture> fri::LoadImage(const char * FName) {
       }
     }
     ret->SetTextureData(256, 256, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+    delete[] buffer;
+
     return std::shared_ptr<Texture>(ret);
   } else {
     SDL_Surface * rgba = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
