@@ -1,9 +1,10 @@
 #ifndef _SYSTEM_REGISTRY_H_
 #define _SYSTEM_REGISTRY_H_
 
-#include <unordered_map>
-#include <string>
+#include <cstring>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 #include "util/Util.hpp"
 #include "util/Hash.hpp"
@@ -39,7 +40,17 @@ namespace fri {
     template<typename T, typename TCreator=_registry_allocators::DefaultAllocator<T>>
     class Registry {
       private:
-        std::unordered_map<const char *, const T, fri::util::StringHash> _storage;
+        struct StringEqual {
+          bool operator() (const char * const & A, const char * const & B) const {
+            return !strcmp(A, B);
+          }
+
+          constexpr bool operator() (const char * & A, const char * & B) const {
+            return !strcmp(A, B);
+          }
+        };
+
+        std::unordered_map<const char *, const T, fri::util::StringHash, StringEqual> _storage;
         TCreator _constructor;
 
         DISALLOW_COPY_AND_ASSIGN(Registry);
